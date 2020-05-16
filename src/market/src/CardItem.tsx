@@ -32,12 +32,12 @@ export function CardItem() {
           <Typography gutterBottom variant="h5" component="h2">
             Iphone 10
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          {/* <Typography variant="body2" color="textSecondary" component="p">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate,
             tempore ducimus, ex natus commodi facilis quae debitis repudiandae
             soluta iusto repellendus nemo non blanditiis aperiam. Inventore
             itaque sint soluta laudantium!
-          </Typography>
+          </Typography> */}
         </CardContent>
       </CardActionArea>
       <CardActions>
