@@ -22,7 +22,7 @@ export class Ad {
     date: Date;
 
     @Column()
-    img_pth: string;
+    imgPth: string;
 
     @OneToOne(type => Contact)
     @JoinColumn()

@@ -10,14 +10,14 @@ services:
             - 8080:8080
         restart: always
         
-    market-frontend:
-        depends_on:
-            - market-api
-        build: ./src/market
-        image: market:latest
-        ports:
-            - 80:80
-        restart: always
+    # market-frontend:
+    #     depends_on:
+    #         - market-api
+    #     build: ./src/market
+    #     image: market:latest
+    #     ports:
+    #         - 80:80
+    #     restart: always
 
     db:
         image: postgres:alpine
