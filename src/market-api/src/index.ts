@@ -3,11 +3,13 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {Ad} from "./entity/Ad";
 import {Contact} from "./entity/Contact";
+import express = require("express");
+import cors = require("cors");
 
 createConnection().then(async connection => {
     
-    let adRepository = connection.getRepository(Ad);
-    let allAds = await adRepository.find();
+    const adRepository = connection.getRepository(Ad);
+    const allAds = await adRepository.find();
     if (allAds.length == 0){
         const cont1 = new Contact();
         cont1.email = "milan@buygo.cz";
@@ -23,7 +25,7 @@ createConnection().then(async connection => {
         ad1.category = "Computers";
         ad1.price = 20000;
         ad1.date = new Date(Date.now());
-        ad1.img_pth = "img/macbook.jpg";
+        ad1.imgPth = "img/macbook.jpg";
         ad1.contact = cont1;
 
         await connection.manager.save(ad1);
@@ -42,14 +44,12 @@ createConnection().then(async connection => {
         ad2.category = "Cars";
         ad2.price = 90000;
         ad2.date = new Date(Date.now());
-        ad2.img_pth = "img/passat.jpg";
+        ad2.imgPth = "img/passat.jpg";
         ad2.contact = cont2;
 
         await connection.manager.save(ad2);
     }
 
-    const express = require("express");
-    const cors = require('cors');
 
     const app = express();
     app.use(bodyParser.json());
