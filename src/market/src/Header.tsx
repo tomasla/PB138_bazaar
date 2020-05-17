@@ -3,12 +3,8 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  makeStyles,
-  Theme,
-  createStyles,
   Grid,
-} from "@material-ui/core";
-import styles from "./header.module.css"; 
+} from "@material-ui/core"; 
 
 export default class Header extends Component {
 
