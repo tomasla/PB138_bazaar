@@ -7,7 +7,7 @@ services:
         build: ./src/market-api
         image: market-api:latest
         ports:
-            - 8080:8080
+            - 3000:3000
         restart: always
         
     # market-frontend:
@@ -32,5 +32,5 @@ services:
         image: adminer
         restart: always
         ports:
-            - 8081:8080
+            - 8080:8080
 

@@ -5,10 +5,10 @@ import {Contact} from "./Contact";
 export class Ad {
     @PrimaryGeneratedColumn()
     id: number;
-
+    
     @Column()
     name: string;
-
+    
     @Column()
     description: string;
 
@@ -16,14 +16,14 @@ export class Ad {
     category: string;
 
     @Column()
-    price: number;
+    img: string;
 
+    @Column()
+    price: number;
+    
     @Column()
     date: Date;
-
-    @Column()
-    imgPth: string;
-
+    
     @OneToOne(type => Contact)
     @JoinColumn()
     contact: Contact;
