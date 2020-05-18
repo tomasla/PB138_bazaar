@@ -1,25 +1,34 @@
-import React, { Component } from 'react'
+import React, { Component, FunctionComponent, useEffect } from "react";
 import { Grid } from "@material-ui/core";
-import { CardItem } from './CardItem';
+import { CardItem } from "./CardItem";
 import dataList from "./tempData";
 
+export const CardView: FunctionComponent = () => {
+  const [data, setData] = React.useState([]);
 
 
+  useEffect(() => {
+      getAds()
+  });
 
 
-export default class CardView extends Component {
+  const getAds = async () => {
+    const url = `http://localhost:8080/ads`;
+    const response = await fetch(url);
+    const dataObject = await response.json();
+    const dataArray:any= Object.values(dataObject);
+    setData(dataArray);
+  };
 
-    getItemCard = (dataObject:any) => {
-        return (
-          <Grid item xs={12} sm={4} key={dataObject.id}><CardItem {...dataObject}/></Grid>
-        );
-      };
+  const getItemCard = (dataObject: any) => {
+    return (
+      <Grid item xs={12} sm={4} key={dataObject.id}>
+        <CardItem {...dataObject} />
+      </Grid>
+    );
+  };
 
-    render() {
-        return (
-            <Grid container>
-                {dataList.map(dataObject => this.getItemCard(dataObject))}
-            </Grid>
-        )
-    }
-}
+  return (
+    <Grid container>{data.map((dataObject) => getItemCard(dataObject))}</Grid>
+  );
+};

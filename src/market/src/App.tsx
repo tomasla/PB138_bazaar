@@ -2,7 +2,7 @@ import React from "react";
 import "./App.scss";
 import { Grid } from "@material-ui/core";
 import Header from "./Header";
-import CardView from "./CardView";
+import { CardView } from "./CardView";
 
 function App() {
   return (
