@@ -13,14 +13,14 @@ interface IProps {
   name: string;
   description: string;
   price: number;
-  imgPth: string;
+  img: string;
 }
 
 export const CardItem: FunctionComponent<IProps> = ({
   name,
   description,
   price,
-  imgPth,
+  img,
 }) => {
 
 
@@ -32,7 +32,7 @@ export const CardItem: FunctionComponent<IProps> = ({
           component="img"
           alt="product picture"
           height="250"
-          image={imgPth}
+          image={img}
           title={name}
         />
         <CardContent>
