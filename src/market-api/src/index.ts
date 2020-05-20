@@ -11,7 +11,6 @@ createConnection().then(async connection => {
     const adRepository = connection.getRepository(Ad);
     const allAds = await adRepository.find();
     if (allAds.length == 0){
-        /*
         const cont1 = new Contact();
         cont1.email = "milan@buygo.cz";
         cont1.name = "Milan";
@@ -25,9 +24,9 @@ createConnection().then(async connection => {
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
         ad1.category = "Computers";
+        ad1.img = "https://ae01.alicdn.com/kf/HLB1iCdKTCzqK1RjSZFLq6An2XXaY/Original-NOKIA-3310-2G-GSM-Unlocked-Mobile-Phone-Good-Cheap-Refurbished-Cellphone.jpg_640x640q70.jpg";
         ad1.price = 20000;
         ad1.date = new Date(Date.now());
-        ad1.imgPth = "https://ae01.alicdn.com/kf/HLB1iCdKTCzqK1RjSZFLq6An2XXaY/Original-NOKIA-3310-2G-GSM-Unlocked-Mobile-Phone-Good-Cheap-Refurbished-Cellphone.jpg_640x640q70.jpg";
         
         ad1.contact = cont1;
 
@@ -46,9 +45,9 @@ createConnection().then(async connection => {
         ad2.name = "VW Passat";
         ad2.description = "150k km, r. v. 2009";
         ad2.category = "Cars";
+        ad2.img = "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
         ad2.price = 90000;
         ad2.date = new Date(Date.now());
-        ad2.imgPth = "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
         ad2.contact = cont2;
 
         await connection.manager.save(ad2);
@@ -66,13 +65,13 @@ createConnection().then(async connection => {
         ad3.name = "Xiaomi";
         ad3.description = "good used phone - working 100%";
         ad3.category = "phones";
+        ad3.img = "https://images.pexels.com/photos/163143/sackcloth-sackcloth-textured-laptop-ipad-163143.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
         ad3.price = 25;
         ad3.date = new Date(Date.now());
-        ad3.imgPth = "https://images.pexels.com/photos/163143/sackcloth-sackcloth-textured-laptop-ipad-163143.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
         
         ad3.contact = cont3;
 
-        await connection.manager.save(ad3);*/
+        await connection.manager.save(ad3);
     }
 
 
@@ -104,13 +103,6 @@ createConnection().then(async connection => {
             .into(Contact)
             .values(req.body.contact)
             .execute();
-            /*
-        result = await adRepository
-            .createQueryBuilder()
-            .insert()
-            .into(Contact)
-            .values(req.body)
-            .execute();*/
         const ad = await adRepository.create(req.body);
         const result = await adRepository.save(ad);
         return res.send(result);

@@ -71,21 +71,27 @@ export const CardView: FunctionComponent = (): any | null => {
   };
 
   return (
-    <React.Fragment>
-      <Input
-        id="filled-basic"
-        type="text"
-        placeholder="search item here"
-        onChange={changeHandler}
-      />
+    <div>
+    <Grid item sm={2} xs={false}></Grid>
+    <Grid item xs={10} sm={8}>
+      <React.Fragment>
+        <Input
+          id="filled-basic"
+          type="text"
+          placeholder="search item here"
+          onChange={changeHandler}
+        />
 
-      <Grid container>{data.map((dataObject) => getItemCard(dataObject))}</Grid>
-      <button type="button" onClick={clickHandler}>
-        Clicking will add random product to DB and display all tasks
-      </button>
-      <button type="button" onClick={clickHandlerSort}>
-        sort
-      </button>
-    </React.Fragment>
+        <Grid container>{data.map((dataObject) => getItemCard(dataObject))}</Grid>
+        <button type="button" onClick={clickHandler}>
+          Clicking will add random product to DB and display all tasks
+        </button>
+        <button type="button" onClick={clickHandlerSort}>
+          sort
+        </button>
+      </React.Fragment>
+    </Grid>
+    <Grid item sm={2} xs={false}></Grid>
+    </div>
   );
 };

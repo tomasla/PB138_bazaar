@@ -6,21 +6,22 @@ import {
   Grid,
 } from "@material-ui/core"; 
 
+import { Link } from "react-router-dom";
+
+
 export default class Header extends Component {
-
-  
-
   render() {
     return (
       <AppBar position="static">
         <Toolbar>
           <Grid container justify="space-evenly">
-              <Grid item><Typography>Marketplace</Typography></Grid>
-              <Grid item><Typography>Add Offer</Typography></Grid>
-              <Grid item><Typography>Categories</Typography></Grid>
+              <Grid item><Link to={{pathname: "/"}}>Marketplace</Link></Grid>
+              <Grid item><Link to={{pathname: "/addoffer"}}>Add Offer</Link></Grid>
+              <Grid item><Link to={{pathname: "/categories"}}>Categories</Link></Grid>
           </Grid>
         </Toolbar>
       </AppBar>
+      
     );
   }
 }

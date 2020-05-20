@@ -2,6 +2,9 @@ import React from "react";
 import { Grid, ThemeProvider, Paper, createMuiTheme } from "@material-ui/core";
 import Header from "./Header";
 import { CardView } from "./CardView";
+import { AddAd } from "./AddAd";
+import { Categories } from "./Categories";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 
 //optional dark mode = tbd = type: "dark"
@@ -17,14 +20,22 @@ function App() {
       <Paper>
       <Grid container direction="column">
         <Grid item xs={12}>
-          <Header />
+          <BrowserRouter>
+            <Header/>
+            <Switch>
+              <Route path="/addoffer" component={AddAd} />
+              <Route path="/categories" component={Categories} />
+              <Route path="/" component={CardView} />
+            </Switch>
+          </BrowserRouter>
         </Grid>
         <Grid container justify="space-around">
+          {/*
           <Grid item sm={2} xs={false}></Grid>
           <Grid item xs={10} sm={8}>
             <CardView />
           </Grid>
-          <Grid item sm={2} xs={false}></Grid>
+          <Grid item sm={2} xs={false}></Grid>*/}
         </Grid>
         <Grid>FOOTER</Grid>
       </Grid>
