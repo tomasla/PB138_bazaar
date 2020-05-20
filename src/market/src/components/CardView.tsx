@@ -20,7 +20,6 @@ export const CardView: FunctionComponent = (): any | null => {
   };
 
   const getItemCard = (dataObject: any) => {
-
     //search for now working only with name of the product - include description if decided to
     if (
       search !== "" &&
@@ -28,6 +27,7 @@ export const CardView: FunctionComponent = (): any | null => {
     ) {
       return null;
     }
+    console.log(data);
 
     return (
       <Grid item xs={12} sm={4} key={dataObject.id}>
@@ -37,8 +37,8 @@ export const CardView: FunctionComponent = (): any | null => {
   };
 
   // just for testing purpose
-  const clickHandler = () => {
-    axios.post("http://localhost:3000/ads", {
+  const clickHandler = async () => {
+    await axios.post("http://localhost:3000/ads", {
       name: "Intel pentium",
       description: "Super intel pentium",
       category: "Computers",
@@ -53,6 +53,16 @@ export const CardView: FunctionComponent = (): any | null => {
         phone: "938472837",
       },
     });
+    getAds();
+  };
+
+  //not working yet
+  const clickHandlerSort = () => {
+    let tempData = data;
+    tempData.sort(function (a: any, b: any) {
+      return a.price - b.price;
+    });
+    // setData(tempData);
   };
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,12 +79,12 @@ export const CardView: FunctionComponent = (): any | null => {
         onChange={changeHandler}
       />
 
-
-      <Grid container>
-        {data.map((dataObject) => getItemCard(dataObject))}
-      </Grid>
+      <Grid container>{data.map((dataObject) => getItemCard(dataObject))}</Grid>
       <button type="button" onClick={clickHandler}>
-        Clicking will add random product to DB
+        Clicking will add random product to DB and display all tasks
+      </button>
+      <button type="button" onClick={clickHandlerSort}>
+        sort
       </button>
     </React.Fragment>
   );

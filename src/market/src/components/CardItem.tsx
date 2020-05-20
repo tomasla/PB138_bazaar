@@ -7,7 +7,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { Grid } from "@material-ui/core";
-import "./CardItem.scss";
+import "./../styles/CardItem.scss";
 
 interface IProps {
   name: string;
