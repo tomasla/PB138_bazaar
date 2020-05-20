@@ -8,6 +8,7 @@ import {
 
 export default class Header extends Component {
 
+  
 
   render() {
     return (
@@ -16,7 +17,6 @@ export default class Header extends Component {
           <Grid container justify="space-evenly">
               <Grid item><Typography>Marketplace</Typography></Grid>
               <Grid item><Typography>Add Offer</Typography></Grid>
-              <Grid item><Typography>Searchbar</Typography></Grid>
               <Grid item><Typography>Categories</Typography></Grid>
           </Grid>
         </Toolbar>

@@ -7,20 +7,20 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { Grid } from "@material-ui/core";
-import "./CardItem.scss";
+import "./../styles/CardItem.scss";
 
 interface IProps {
   name: string;
   description: string;
   price: number;
-  imgPth: string;
+  img: string;
 }
 
 export const CardItem: FunctionComponent<IProps> = ({
   name,
   description,
   price,
-  imgPth,
+  img,
 }) => {
 
 
@@ -32,7 +32,7 @@ export const CardItem: FunctionComponent<IProps> = ({
           component="img"
           alt="product picture"
           height="250"
-          image={imgPth}
+          image={img}
           title={name}
         />
         <CardContent>
