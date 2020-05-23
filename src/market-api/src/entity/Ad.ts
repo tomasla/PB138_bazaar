@@ -1,5 +1,7 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, JoinColumn} from "typeorm";
 import {Contact} from "./Contact";
+import {type} from "os";
+import {Image} from "./Image";
 
 @Entity()
 export class Ad {
@@ -16,7 +18,10 @@ export class Ad {
     category: string;
 
     @Column()
-    img: string;
+    thumbnail: string;
+
+    @OneToMany(type => Image, image => image.ad)
+    images: Image[];
 
     @Column()
     price: number;

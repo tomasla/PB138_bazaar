@@ -5,6 +5,7 @@ import {Ad} from "./entity/Ad";
 import {Contact} from "./entity/Contact";
 import express = require("express");
 import cors = require("cors");
+import {Request, Response} from "express";
 
 createConnection().then(async connection => {
     
@@ -24,7 +25,8 @@ createConnection().then(async connection => {
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
         ad1.category = "Computers";
-        ad1.img = "https://ae01.alicdn.com/kf/HLB1iCdKTCzqK1RjSZFLq6An2XXaY/Original-NOKIA-3310-2G-GSM-Unlocked-Mobile-Phone-Good-Cheap-Refurbished-Cellphone.jpg_640x640q70.jpg";
+        // ad1.img = "https://ae01.alicdn.com/kf/HLB1iCdKTCzqK1RjSZFLq6An2XXaY/Original-NOKIA-3310-2G-GSM-Unlocked-Mobile-Phone-Good-Cheap-Refurbished-Cellphone.jpg_640x640q70.jpg";
+        ad1.thumbnail = "../images/1.jpg";
         ad1.price = 20000;
         ad1.date = new Date(Date.now());
         
@@ -45,7 +47,7 @@ createConnection().then(async connection => {
         ad2.name = "VW Passat";
         ad2.description = "150k km, r. v. 2009";
         ad2.category = "Cars";
-        ad2.img = "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+        ad2.thumbnail = "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
         ad2.price = 90000;
         ad2.date = new Date(Date.now());
         ad2.contact = cont2;
@@ -65,7 +67,7 @@ createConnection().then(async connection => {
         ad3.name = "Xiaomi";
         ad3.description = "good used phone - working 100%";
         ad3.category = "phones";
-        ad3.img = "https://images.pexels.com/photos/163143/sackcloth-sackcloth-textured-laptop-ipad-163143.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+        ad3.thumbnail = "https://images.pexels.com/photos/163143/sackcloth-sackcloth-textured-laptop-ipad-163143.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
         ad3.price = 25;
         ad3.date = new Date(Date.now());
         
@@ -80,7 +82,11 @@ createConnection().then(async connection => {
     app.use(cors());
     const port = process.env.PORT || 3000;
 
-    app.get(`/ads`, async function(req, res){
+    app.get("/", function (req: Request, res: Response) {
+        res.send("Hello world!");
+    });
+
+    app.get(`/ads`, async function(req: Request, res: Response){
         const allAds = await adRepository
         .createQueryBuilder("ad")
         .leftJoinAndSelect("ad.contact", "contact")
@@ -88,7 +94,7 @@ createConnection().then(async connection => {
         res.send(allAds, 200);
     });
 
-    app.get(`/ads/:id`, async function(req, res){
+    app.get(`/ads/:id`, async function(req: Request, res: Response){
         const allAds = await adRepository
         .createQueryBuilder("ad")
         .leftJoinAndSelect("ad.contact", "contact")
@@ -96,7 +102,7 @@ createConnection().then(async connection => {
         res.send(allAds, 200);
     });
 
-    app.post('/ads', async function (req, res){
+    app.post('/ads', async function (req: Request, res: Response){
         await adRepository
             .createQueryBuilder()
             .insert()
