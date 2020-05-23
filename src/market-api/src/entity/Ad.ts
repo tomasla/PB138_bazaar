@@ -1,6 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, JoinColumn} from "typeorm";
 import {Contact} from "./Contact";
-import {type} from "os";
 import {Image} from "./Image";
 
 @Entity()

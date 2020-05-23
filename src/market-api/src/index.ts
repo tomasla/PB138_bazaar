@@ -6,6 +6,7 @@ import {Contact} from "./entity/Contact";
 import express = require("express");
 import cors = require("cors");
 import {Request, Response} from "express";
+import {Image} from "./entity/Image";
 
 createConnection().then(async connection => {
     
@@ -25,10 +26,21 @@ createConnection().then(async connection => {
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
         ad1.category = "Computers";
-        // ad1.img = "https://ae01.alicdn.com/kf/HLB1iCdKTCzqK1RjSZFLq6An2XXaY/Original-NOKIA-3310-2G-GSM-Unlocked-Mobile-Phone-Good-Cheap-Refurbished-Cellphone.jpg_640x640q70.jpg";
         ad1.thumbnail = "../images/1.jpg";
         ad1.price = 20000;
         ad1.date = new Date(Date.now());
+
+        console.log('adding images')
+
+        let i = 2;
+
+        while (i < 5) {
+            const image = new Image()
+            image.url = `../images/${i}.jpg`;
+            image.ad = ad1;
+            await connection.manager.save(image);
+            i++;
+        }
         
         ad1.contact = cont1;
 
@@ -82,23 +94,24 @@ createConnection().then(async connection => {
     app.use(cors());
     const port = process.env.PORT || 3000;
 
-    app.get("/", function (req: Request, res: Response) {
+    await app.get("/", function (req: Request, res: Response) {
         res.send("Hello world!");
     });
 
-    app.get(`/ads`, async function(req: Request, res: Response){
+    await app.get(`/ads`, async function (req: Request, res: Response) {
         const allAds = await adRepository
-        .createQueryBuilder("ad")
-        .leftJoinAndSelect("ad.contact", "contact")
-        .getMany();
+            .createQueryBuilder("ad")
+            .leftJoinAndSelect("ad.contact", "contact")
+            .leftJoinAndSelect("ad.images", "images")
+            .getMany();
         res.send(allAds, 200);
     });
 
-    app.get(`/ads/:id`, async function(req: Request, res: Response){
+    await app.get(`/ads/:id`, async function (req: Request, res: Response) {
         const allAds = await adRepository
-        .createQueryBuilder("ad")
-        .leftJoinAndSelect("ad.contact", "contact")
-        .getOne();
+            .createQueryBuilder("ad")
+            .leftJoinAndSelect("ad.contact", "contact")
+            .getOne();
         res.send(allAds, 200);
     });
 
@@ -113,6 +126,20 @@ createConnection().then(async connection => {
         const result = await adRepository.save(ad);
         return res.send(result);
     });
+
+    await app.delete('/ad/:id', async function (req: Request, res: Response) {
+        const ad = await adRepository.findOne(req.params.id);
+        if (ad instanceof Ad) {
+            await connection.createQueryBuilder()
+                .delete()
+                .from(Ad)
+                .where('id = :id', {id: ad.id})
+                .execute();
+            res.status(200).json('Ad deleted successfully.');
+        } else {
+            res.status(204).json(`Ad with id: ${req.params.id} does not exist.`);
+        }
+    })
 
     app.listen(port);
 
