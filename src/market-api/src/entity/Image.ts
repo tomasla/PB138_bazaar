@@ -4,7 +4,7 @@ import {Ad} from "./Ad";
 @Entity()
 export class Image {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
     @Column()
     url: string;
@@ -12,6 +12,6 @@ export class Image {
     @ManyToOne(type => Ad, ad => ad.images, {
         cascade: true
     })
-    ad: Ad;
+    ad?: Ad;
 
 }
