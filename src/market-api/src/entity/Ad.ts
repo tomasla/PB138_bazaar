@@ -5,7 +5,7 @@ import {Image} from "./Image";
 @Entity()
 export class Ad {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @Column()
     name: string;
@@ -16,8 +16,8 @@ export class Ad {
     @Column()
     category: string;
 
-    @Column()
-    thumbnail: string;
+    @OneToOne(type => Image)
+    thumbnail: Image;
 
     @OneToMany(type => Image, image => image.ad)
     images: Image[];

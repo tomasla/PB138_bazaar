@@ -3,16 +3,22 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {Ad} from "./entity/Ad";
 import {Contact} from "./entity/Contact";
-import express = require("express");
-import cors = require("cors");
+import * as express from "express";
 import {Request, Response} from "express";
+import cors = require("cors");
 import {Image} from "./entity/Image";
 
 createConnection().then(async connection => {
     
     const adRepository = connection.getRepository(Ad);
-    const allAds = await adRepository.find();
-    if (allAds.length == 0){
+
+    const ads = await adRepository.find();
+
+    if (ads.length == 0){
+
+        console.log("There are no ads in the database.");
+        console.log("Adding new ads to the database...")
+
         const cont1 = new Contact();
         cont1.email = "milan@buygo.cz";
         cont1.name = "Milan";
@@ -26,7 +32,14 @@ createConnection().then(async connection => {
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
         ad1.category = "Computers";
-        ad1.thumbnail = "../images/1.jpg";
+
+        const thumb = new Image();
+        thumb.url = "../images/1.jpg";
+        thumb.ad = ad1;
+
+        await connection.manager.save(thumb);
+
+        ad1.thumbnail = thumb;
         ad1.price = 20000;
         ad1.date = new Date(Date.now());
 
@@ -59,7 +72,7 @@ createConnection().then(async connection => {
         ad2.name = "VW Passat";
         ad2.description = "150k km, r. v. 2009";
         ad2.category = "Cars";
-        ad2.thumbnail = "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+        ad2.thumbnail = thumb;
         ad2.price = 90000;
         ad2.date = new Date(Date.now());
         ad2.contact = cont2;
@@ -79,7 +92,7 @@ createConnection().then(async connection => {
         ad3.name = "Xiaomi";
         ad3.description = "good used phone - working 100%";
         ad3.category = "phones";
-        ad3.thumbnail = "https://images.pexels.com/photos/163143/sackcloth-sackcloth-textured-laptop-ipad-163143.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+        ad3.thumbnail = thumb;
         ad3.price = 25;
         ad3.date = new Date(Date.now());
         
@@ -88,13 +101,12 @@ createConnection().then(async connection => {
         await connection.manager.save(ad3);
     }
 
-
     const app = express();
     app.use(bodyParser.json());
     app.use(cors());
     const port = process.env.PORT || 3000;
 
-    await app.get("/", function (req: Request, res: Response) {
+    app.get("/", function (req: Request, res: Response) {
         res.send("Hello world!");
     });
 
