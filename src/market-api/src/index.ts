@@ -1,4 +1,4 @@
-import * as bodyParser from  "body-parser";
+import * as bodyParser from "body-parser";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {Ad} from "./entity/Ad";
@@ -10,12 +10,13 @@ import {Image} from "./entity/Image";
 import * as multer from "multer";
 
 createConnection().then(async connection => {
-    
+
     const adRepository = connection.getRepository(Ad);
+    const imageRepository = connection.getRepository(Image);
 
     const ads = await adRepository.find();
 
-    if (ads.length == 0){
+    if (ads.length == 0) {
 
         console.log("There are no ads in the database.");
         console.log("Adding new ads to the database...")
@@ -119,13 +120,15 @@ createConnection().then(async connection => {
             let extension = "";
             if (file.mimetype == "image/jpeg") {
                 extension = ".jpg";
+            } else if (file.mimetype == "image/png") {
+                extension = ".png";
             }
             const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + extension;
             cb(null, file.fieldname + '-' + uniqueSuffix);
         }
     })
 
-    const upload = multer({ storage: storage })
+    const upload = multer({storage: storage})
 
     app.get("/", function (req: Request, res: Response) {
         res.send(`Hello world! ${__dirname}`);
@@ -149,17 +152,44 @@ createConnection().then(async connection => {
         res.status(200).json(allAds);
     });
 
-    app.get('/thumbnail/:id', async function (req: Request, res: Response) {
-        const ad = await adRepository.findOne(req.params.id, {relations: ["thumbnail", "contact"]});
+    /**
+     * /ad/thumbnail/:id vracia thumbnail vo forme suboru (.jpg)
+     * parametrom je id inzeratu
+     */
+    app.get('/ad/thumbnail/:id', async function (req: Request, res: Response) {
+        const ad = await adRepository.findOne(req.params.id, {relations: ["thumbnail"]});
         res.status(200).sendFile(ad.thumbnail.url);
-    })
+    });
 
-    app.post('/ads', upload.single('thumbnail'), async function (req: Request, res: Response){
+    /**
+     * /ad/gallery/:id vracia galeriu inzeratu.
+     * parametrom je id inzeratu
+     */
+    app.get('/ad/gallery/:id', async function (req: Request, res: Response) {
+        const ad = await adRepository.findOne(req.params.id, {relations: ["gallery"]});
+        res.status(200).json(ad.gallery);
+    });
+
+    /**
+     * /ad/gallery/image/:id vracia jeden obrazok vo forme suboru (.jpg)
+     * s id = :id
+     */
+    app.get('/ad/gallery/image/:id', async function (req: Request, res: Response) {
+        const image = await imageRepository.findOne(req.params.id);
+        res.status(200).sendFile(image.url);
+    });
+
+    app.post('/ads', upload.fields(
+        [{
+            name: 'thumbnail',
+            maxCount: 1
+        },
+            {
+                name: 'gallery',
+                maxCount: 10
+            }
+        ]), async function (req: Request, res: Response) {
         const data = JSON.parse(req.body.body);
-
-        const thumbnail: Image = new Image();
-        thumbnail.url = `${__dirname}/uploads/` + req.file.filename;
-        await connection.manager.save(thumbnail);
 
         await adRepository
             .createQueryBuilder()
@@ -168,18 +198,29 @@ createConnection().then(async connection => {
             .values(data.contact)
             .execute();
 
-        data.thumbnail = thumbnail;
+        // data.thumbnail = thumbnail;
+        // data.gallery = gallery;
 
-        console.log(thumbnail);
-        console.log(">>>>>>>>>");
-        console.log(data);
-        console.log(">>>>>>>>>");
+        const ad: Ad = {...data};
 
-        const ad = await adRepository.create(data);
+        const gallery: Image[] = [];
 
-        console.log(ad);
+        req.files['gallery'].forEach(function (image) {
+            const img: Image = new Image();
+            img.url = `${__dirname}/uploads/` + image.filename;
+            connection.manager.save(img);
+            gallery.push(img);
+        });
+
+        const thumbnail: Image = new Image();
+        thumbnail.url = `${__dirname}/uploads/` + req.files['thumbnail'][0].filename;
+        await connection.manager.save(thumbnail);
+
+        ad.gallery = gallery;
+        ad.thumbnail = thumbnail;
 
         await adRepository.save(ad);
+
         return res.status(201).send("Data Saved");
     });
 

@@ -18,12 +18,12 @@ export class Ad {
 
     @OneToOne(type => Image)
     @JoinColumn()
-    thumbnail: Image;
+    thumbnail?: Image;
 
-    // @OneToMany(type => Image, image => image.ad, {
-    //     cascade: true
-    // })
-    // images?: Image[];
+    @OneToMany(type => Image, image => image.ad, {
+        cascade: true
+    })
+    gallery?: Image[];
 
     @Column()
     price: number;
