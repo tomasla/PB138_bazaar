@@ -17,10 +17,13 @@ export class Ad {
     category: string;
 
     @OneToOne(type => Image)
+    @JoinColumn()
     thumbnail: Image;
 
-    @OneToMany(type => Image, image => image.ad)
-    images: Image[];
+    // @OneToMany(type => Image, image => image.ad, {
+    //     cascade: true
+    // })
+    // images?: Image[];
 
     @Column()
     price: number;

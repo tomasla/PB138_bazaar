@@ -20,6 +20,7 @@ createConnection().then(async connection => {
         console.log("There are no ads in the database.");
         console.log("Adding new ads to the database...")
 
+        /*
         const cont1 = new Contact();
         cont1.email = "milan@buygo.cz";
         cont1.name = "Milan";
@@ -28,21 +29,21 @@ createConnection().then(async connection => {
 
         await connection.manager.save(cont1);
 
+
+
         const ad1 = new Ad();
         
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
         ad1.category = "Computers";
-
-        const thumb = new Image();
-        thumb.url = "../images/1.jpg";
-        thumb.ad = ad1;
-
-        await connection.manager.save(thumb);
-
         ad1.thumbnail = thumb;
         ad1.price = 20000;
         ad1.date = new Date(Date.now());
+
+
+
+
+
 
         console.log('adding images')
 
@@ -100,6 +101,8 @@ createConnection().then(async connection => {
         ad3.contact = cont3;
 
         await connection.manager.save(ad3);
+
+         */
     }
 
     const app = express();
@@ -112,8 +115,13 @@ createConnection().then(async connection => {
             cb(null, `${__dirname}/uploads`)
         },
         filename: function (req, file, cb) {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-            cb(null, file.fieldname + '-' + uniqueSuffix)
+            console.log(file.mimetype);
+            let extension = "";
+            if (file.mimetype == "image/jpeg") {
+                extension = ".jpg";
+            }
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + extension;
+            cb(null, file.fieldname + '-' + uniqueSuffix);
         }
     })
 
@@ -127,7 +135,7 @@ createConnection().then(async connection => {
         const allAds = await adRepository
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
-            .leftJoinAndSelect("ad.images", "images")
+            .leftJoinAndSelect("ad.thumbnail", "thumbnail")
             .getMany();
         res.status(200).json(allAds);
     });
@@ -136,19 +144,41 @@ createConnection().then(async connection => {
         const allAds = await adRepository
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
+            .leftJoinAndSelect("ad.thumbnail", "thumbnail")
             .getOne();
         res.status(200).json(allAds);
     });
 
+    app.get('/thumbnail/:id', async function (req: Request, res: Response) {
+        const ad = await adRepository.findOne(req.params.id, {relations: ["thumbnail", "contact"]});
+        res.status(200).sendFile(ad.thumbnail.url);
+    })
+
     app.post('/ads', upload.single('thumbnail'), async function (req: Request, res: Response){
         const data = JSON.parse(req.body.body);
+
+        const thumbnail: Image = new Image();
+        thumbnail.url = `${__dirname}/uploads/` + req.file.filename;
+        await connection.manager.save(thumbnail);
+
         await adRepository
             .createQueryBuilder()
             .insert()
             .into(Contact)
             .values(data.contact)
             .execute();
+
+        data.thumbnail = thumbnail;
+
+        console.log(thumbnail);
+        console.log(">>>>>>>>>");
+        console.log(data);
+        console.log(">>>>>>>>>");
+
         const ad = await adRepository.create(data);
+
+        console.log(ad);
+
         await adRepository.save(ad);
         return res.status(201).send("Data Saved");
     });

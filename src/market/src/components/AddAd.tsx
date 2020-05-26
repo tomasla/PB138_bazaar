@@ -62,12 +62,12 @@ export class AddAd extends Component<IAddAdProps, IAddAdState>{
                 name: "Meno",
                 phone: "0900709092",
                 surname: "Priezvisko"
-            },
-            images: [
-                {
-                    url: "../../../market-api/images/2.jpg"
-                }
-            ]
+            }
+            // images: [
+            //     {
+            //         url: "../../../market-api/images/2.jpg"
+            //     }
+            // ]
         }
         this.props.adStore!.addAd(newAd, this.state.thumbnailInputValue!).then(r => console.log(r));
         event.preventDefault();
