@@ -15,11 +15,13 @@ export class AdStore {
     }
 
     @action
-    addAd = async (ad: Ad) => {
+    addAd = async (ad: Ad, thumbnail?: File) => {
+        const formData: FormData = new FormData();
+        formData.append("thumbnail", thumbnail!);
+        formData.append('body', JSON.stringify({...ad}));
         const requestOptions = {
             method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({...ad})
+            body: formData
         };
         const res = await fetch("http://localhost:3000/ads", requestOptions);
         this.ads.push(ad);

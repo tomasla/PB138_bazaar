@@ -1,12 +1,9 @@
 import React, {ChangeEvent, Component} from "react";
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
 import {inject, observer} from "mobx-react";
 import {AdStore} from "../stores/AdStore";
 import {Button} from "@material-ui/core";
 import {Ad} from "../../../market-api/src/entity/Ad";
-
-const fs = require("fs");
 
 interface IAddAdProps {
     adStore?: AdStore;
@@ -16,7 +13,7 @@ interface IAddAdState {
     nameInputValue: string;
     // descriptionInputValue: string;
     // categoryInputValue: string;
-    thumbnailInputValue: string;
+    thumbnailInputValue?: File;
     // priceInputValue: number;
 }
 
@@ -30,7 +27,6 @@ export class AddAd extends Component<IAddAdProps, IAddAdState>{
             nameInputValue: " ",
             // descriptionInputValue: " ",
             // categoryInputValue: " ",
-            thumbnailInputValue: ""
             // priceInputValue: 0
         }
     }
@@ -42,7 +38,13 @@ export class AddAd extends Component<IAddAdProps, IAddAdState>{
         });
     }
 
-
+    thumbnailInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.files![0]);
+        this.setState({
+            ...this.state,
+            thumbnailInputValue: event.target.files![0]
+        })
+    }
 
     submitForm = (event: React.FormEvent) => {
         console.log("Form submitted..");
@@ -67,7 +69,7 @@ export class AddAd extends Component<IAddAdProps, IAddAdState>{
                 }
             ]
         }
-        this.props.adStore!.addAd(newAd);
+        this.props.adStore!.addAd(newAd, this.state.thumbnailInputValue!).then(r => console.log(r));
         event.preventDefault();
     }
 
@@ -77,7 +79,7 @@ export class AddAd extends Component<IAddAdProps, IAddAdState>{
                 <TextField id="standard-basic" label="Name" value={this.state.nameInputValue} onChange={this.inputValueChanged}/>
                 {/*<TextField id="standard-basic" label="Description" value={this.state.descriptionInputValue}/>*/}
                 {/*<TextField id="standard-basic" label="Category" value={this.state.categoryInputValue}/>*/}
-                <TextField id="standard-basic" type="file" label="Thumbnail" value={this.state.thumbnailInputValue}/>
+                <TextField id="standard-basic" type="file" label="Thumbnail" onChange={this.thumbnailInputHandler}/>
                 {/*<TextField id="standard-basic" label="Price" value={this.state.priceInputValue}/>*/}
                 <Button variant="contained" type="submit" color="primary">
                     Primary

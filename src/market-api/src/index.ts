@@ -7,6 +7,7 @@ import * as express from "express";
 import {Request, Response} from "express";
 import cors = require("cors");
 import {Image} from "./entity/Image";
+import * as multer from "multer";
 
 createConnection().then(async connection => {
     
@@ -106,8 +107,20 @@ createConnection().then(async connection => {
     app.use(cors());
     const port = process.env.PORT || 3000;
 
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, `${__dirname}/uploads`)
+        },
+        filename: function (req, file, cb) {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+            cb(null, file.fieldname + '-' + uniqueSuffix)
+        }
+    })
+
+    const upload = multer({ storage: storage })
+
     app.get("/", function (req: Request, res: Response) {
-        res.send("Hello world!");
+        res.send(`Hello world! ${__dirname}`);
     });
 
     await app.get(`/ads`, async function (req: Request, res: Response) {
@@ -116,7 +129,7 @@ createConnection().then(async connection => {
             .leftJoinAndSelect("ad.contact", "contact")
             .leftJoinAndSelect("ad.images", "images")
             .getMany();
-        res.send(allAds, 200);
+        res.status(200).json(allAds);
     });
 
     await app.get(`/ads/:id`, async function (req: Request, res: Response) {
@@ -124,19 +137,20 @@ createConnection().then(async connection => {
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
             .getOne();
-        res.send(allAds, 200);
+        res.status(200).json(allAds);
     });
 
-    app.post('/ads', async function (req: Request, res: Response){
+    app.post('/ads', upload.single('thumbnail'), async function (req: Request, res: Response){
+        const data = JSON.parse(req.body.body);
         await adRepository
             .createQueryBuilder()
             .insert()
             .into(Contact)
-            .values(req.body.contact)
+            .values(data.contact)
             .execute();
-        const ad = await adRepository.create(req.body);
-        const result = await adRepository.save(ad);
-        return res.send(result);
+        const ad = await adRepository.create(data);
+        await adRepository.save(ad);
+        return res.status(201).send("Data Saved");
     });
 
     await app.delete('/ad/:id', async function (req: Request, res: Response) {
