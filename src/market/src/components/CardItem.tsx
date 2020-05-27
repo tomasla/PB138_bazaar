@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { Grid } from "@material-ui/core";
 import "./../styles/CardItem.scss";
+import { Link } from "react-router-dom";
 
 interface IProps {
   name: string;
@@ -22,9 +23,6 @@ export const CardItem: FunctionComponent<IProps> = ({
   price,
   img,
 }) => {
-
-
-
   return (
     <Card className="card">
       <CardActionArea>
@@ -40,7 +38,7 @@ export const CardItem: FunctionComponent<IProps> = ({
             {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {description}
+            <Link to={{pathname: `/1`}}>Info</Link>
           </Typography>
         </CardContent>
       </CardActionArea>

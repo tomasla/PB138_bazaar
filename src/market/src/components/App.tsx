@@ -4,6 +4,7 @@ import Header from "./Header";
 import {CardView} from "./CardView";
 import {AddAd} from "./AddAd";
 import {Categories} from "./Categories";
+import {AdDetails} from "./AdDetails";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {Provider} from "mobx-react";
 import {createStores} from "../stores/CreateStores";
@@ -30,6 +31,7 @@ function App() {
                                 <Switch>
                                     <Route path="/addoffer" component={AddAd}/>
                                     <Route path="/categories" component={Categories}/>
+                                    <Route path="/:id" component={AdDetails}/>
                                     <Route path="/" component={CardView}/>
                                 </Switch>
                             </BrowserRouter>
