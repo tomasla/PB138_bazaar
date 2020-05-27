@@ -4,37 +4,47 @@ import {inject, observer} from "mobx-react";
 import {AdStore} from "../stores/AdStore";
 import {Button} from "@material-ui/core";
 import {Ad} from "../../../market-api/src/entity/Ad";
+import FormControl from "@material-ui/core/FormControl";
 
 interface IAddAdProps {
     adStore?: AdStore;
 }
 
 interface IAddAdState {
-    nameInputValue: string;
-    // descriptionInputValue: string;
-    // categoryInputValue: string;
-    thumbnailInputValue?: File;
-    // priceInputValue: number;
+    nameInput: string;
+    descriptionInput: string;
+    categoryInput: string;
+    thumbnailInput?: File;
+    galleryInput?: FileList;
+    priceInput: number;
+    emailInput: string;
+    contactNameInput: string;
+    surnameInput: string;
+    phoneInput: string;
 }
 
 @inject('adStore')
 @observer
-export class AddAd extends Component<IAddAdProps, IAddAdState>{
+export class AddAd extends Component<IAddAdProps, IAddAdState> {
 
     constructor(props: IAddAdProps) {
         super(props);
         this.state = {
-            nameInputValue: " ",
-            // descriptionInputValue: " ",
-            // categoryInputValue: " ",
-            // priceInputValue: 0
+            nameInput: " ",
+            descriptionInput: " ",
+            categoryInput: " ",
+            priceInput: 0,
+            contactNameInput: " ",
+            emailInput: " ",
+            surnameInput: " ",
+            phoneInput: " "
         }
     }
 
     inputValueChanged = (event: ChangeEvent<HTMLInputElement>) => {
         this.setState({
             ...this.state,
-            nameInputValue: event.target.value
+            [event.target.name]: event.target.value
         });
     }
 
@@ -42,48 +52,68 @@ export class AddAd extends Component<IAddAdProps, IAddAdState>{
         console.log(event.target.files![0]);
         this.setState({
             ...this.state,
-            thumbnailInputValue: event.target.files![0]
+            thumbnailInput: event.target.files![0]
         })
-    }
+    };
+
+    galleryInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.files);
+        // @ts-ignore
+        this.setState({
+            ...this.state,
+            galleryInput: event.target.files
+        })
+    };
 
     submitForm = (event: React.FormEvent) => {
-        console.log("Form submitted..");
         const newAd: Ad = {
-            thumbnail: {
-                url: "url.jpg"
-            },
-            category: "Laptops",
+            category: this.state.categoryInput,
             date: new Date(),
-            description: "great new laptop",
-            name: this.state.nameInputValue,
-            price: 12345,
+            description: this.state.descriptionInput,
+            name: this.state.nameInput,
+            price: this.state.priceInput,
             contact: {
-                email: "email@mail.com",
-                name: "Meno",
-                phone: "0900709092",
-                surname: "Priezvisko"
-            },
-            images: [
-                {
-                    url: "../../../market-api/images/2.jpg"
-                }
-            ]
+                email: this.state.emailInput,
+                name: this.state.contactNameInput,
+                phone: this.state.phoneInput,
+                surname: this.state.surnameInput
+            }
         }
-        this.props.adStore!.addAd(newAd, this.state.thumbnailInputValue!).then(r => console.log(r));
+        this.props.adStore!.addAd(newAd, this.state.thumbnailInput!, this.state.galleryInput);
         event.preventDefault();
     }
 
-    render(){
+    render() {
         return (
             <form onSubmit={this.submitForm} noValidate autoComplete="off">
-                <TextField id="standard-basic" label="Name" value={this.state.nameInputValue} onChange={this.inputValueChanged}/>
-                {/*<TextField id="standard-basic" label="Description" value={this.state.descriptionInputValue}/>*/}
-                {/*<TextField id="standard-basic" label="Category" value={this.state.categoryInputValue}/>*/}
-                <TextField id="standard-basic" type="file" label="Thumbnail" onChange={this.thumbnailInputHandler}/>
-                {/*<TextField id="standard-basic" label="Price" value={this.state.priceInputValue}/>*/}
+                <FormControl>
+                    <TextField id="standard-basic" name="nameInput" label="Name" value={this.state.nameInput}
+                               onChange={this.inputValueChanged}/>
+                    <TextField id="standard-basic" name="descriptionInput" label="Description"
+                               value={this.state.descriptionInput} onChange={this.inputValueChanged}/>
+                    <TextField id="standard-basic" name="categoryInput" label="Category"
+                               value={this.state.categoryInput} onChange={this.inputValueChanged}/>
+                    <TextField id="standard-basic" type="file" label="Thumbnail"
+                               onChange={this.thumbnailInputHandler}/>
+                    <TextField id="standard-basic" type="file" label="Gallery" inputProps={{multiple: true}}
+                               onChange={this.galleryInputHandler}/>
+                    <TextField id="standard-basic" name="priceInput" label="Price"
+                               value={this.state.priceInput}/>
+                </FormControl>
+                <FormControl>
+                    <TextField id="standard-basic" name="contactNameInput" label="Name"
+                               value={this.state.contactNameInput}/>
+                    <TextField id="standard-basic" name="surnameInput" label="Surname"
+                               value={this.state.surnameInput}/>
+                    <TextField id="standard-basic" name="emailInput" label="Email"
+                               value={this.state.emailInput}/>
+                    <TextField id="standard-basic" name="phoneInput" label="Phone num."
+                               value={this.state.phoneInput}/>
+                </FormControl>
                 <Button variant="contained" type="submit" color="primary">
-                    Primary
+                    Add
                 </Button>
             </form>
-        )}
+        )
+    }
 }

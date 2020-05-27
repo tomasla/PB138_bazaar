@@ -15,9 +15,12 @@ export class AdStore {
     }
 
     @action
-    addAd = async (ad: Ad, thumbnail?: File) => {
+    addAd = async (ad: Ad, thumbnail?: File, gallery?: FileList) => {
         const formData: FormData = new FormData();
         formData.append("thumbnail", thumbnail!);
+        Array.from(gallery!).forEach(function (image) {
+            formData.append('gallery', image);
+        })
         formData.append('body', JSON.stringify({...ad}));
         const requestOptions = {
             method: "POST",

@@ -9,9 +9,7 @@ export class Image {
     @Column()
     url: string;
 
-    @ManyToOne(type => Ad, ad => ad.images, {
-        cascade: true
-    })
-    ad?: Ad;
+    @ManyToOne(type => Ad, ad => ad.gallery)
+    ad: Ad;
 
 }

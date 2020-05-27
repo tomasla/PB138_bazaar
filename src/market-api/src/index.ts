@@ -1,4 +1,4 @@
-import * as bodyParser from  "body-parser";
+import * as bodyParser from "body-parser";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {Ad} from "./entity/Ad";
@@ -10,16 +10,18 @@ import {Image} from "./entity/Image";
 import * as multer from "multer";
 
 createConnection().then(async connection => {
-    
+
     const adRepository = connection.getRepository(Ad);
+    const imageRepository = connection.getRepository(Image);
 
     const ads = await adRepository.find();
 
-    if (ads.length == 0){
+    if (ads.length == 0) {
 
         console.log("There are no ads in the database.");
         console.log("Adding new ads to the database...")
 
+        /*
         const cont1 = new Contact();
         cont1.email = "milan@buygo.cz";
         cont1.name = "Milan";
@@ -28,21 +30,21 @@ createConnection().then(async connection => {
 
         await connection.manager.save(cont1);
 
+
+
         const ad1 = new Ad();
         
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
         ad1.category = "Computers";
-
-        const thumb = new Image();
-        thumb.url = "../images/1.jpg";
-        thumb.ad = ad1;
-
-        await connection.manager.save(thumb);
-
         ad1.thumbnail = thumb;
         ad1.price = 20000;
         ad1.date = new Date(Date.now());
+
+
+
+
+
 
         console.log('adding images')
 
@@ -100,6 +102,8 @@ createConnection().then(async connection => {
         ad3.contact = cont3;
 
         await connection.manager.save(ad3);
+
+         */
     }
 
     const app = express();
@@ -112,12 +116,19 @@ createConnection().then(async connection => {
             cb(null, `${__dirname}/uploads`)
         },
         filename: function (req, file, cb) {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-            cb(null, file.fieldname + '-' + uniqueSuffix)
+            console.log(file.mimetype);
+            let extension = "";
+            if (file.mimetype == "image/jpeg") {
+                extension = ".jpg";
+            } else if (file.mimetype == "image/png") {
+                extension = ".png";
+            }
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + extension;
+            cb(null, file.fieldname + '-' + uniqueSuffix);
         }
     })
 
-    const upload = multer({ storage: storage })
+    const upload = multer({storage: storage})
 
     app.get("/", function (req: Request, res: Response) {
         res.send(`Hello world! ${__dirname}`);
@@ -127,7 +138,7 @@ createConnection().then(async connection => {
         const allAds = await adRepository
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
-            .leftJoinAndSelect("ad.images", "images")
+            .leftJoinAndSelect("ad.thumbnail", "thumbnail")
             .getMany();
         res.status(200).json(allAds);
     });
@@ -136,20 +147,80 @@ createConnection().then(async connection => {
         const allAds = await adRepository
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
+            .leftJoinAndSelect("ad.thumbnail", "thumbnail")
             .getOne();
         res.status(200).json(allAds);
     });
 
-    app.post('/ads', upload.single('thumbnail'), async function (req: Request, res: Response){
+    /**
+     * /ad/thumbnail/:id vracia thumbnail vo forme suboru (.jpg)
+     * parametrom je id inzeratu
+     */
+    app.get('/ad/thumbnail/:id', async function (req: Request, res: Response) {
+        const ad = await adRepository.findOne(req.params.id, {relations: ["thumbnail"]});
+        res.status(200).sendFile(ad.thumbnail.url);
+    });
+
+    /**
+     * /ad/gallery/:id vracia galeriu inzeratu.
+     * parametrom je id inzeratu
+     */
+    app.get('/ad/gallery/:id', async function (req: Request, res: Response) {
+        const ad = await adRepository.findOne(req.params.id, {relations: ["gallery"]});
+        res.status(200).json(ad.gallery);
+    });
+
+    /**
+     * /ad/gallery/image/:id vracia jeden obrazok vo forme suboru (.jpg)
+     * s id = :id
+     */
+    app.get('/ad/gallery/image/:id', async function (req: Request, res: Response) {
+        const image = await imageRepository.findOne(req.params.id);
+        res.status(200).sendFile(image.url);
+    });
+
+    app.post('/ads', upload.fields(
+        [{
+            name: 'thumbnail',
+            maxCount: 1
+        },
+            {
+                name: 'gallery',
+                maxCount: 10
+            }
+        ]), async function (req: Request, res: Response) {
         const data = JSON.parse(req.body.body);
+
         await adRepository
             .createQueryBuilder()
             .insert()
             .into(Contact)
             .values(data.contact)
             .execute();
-        const ad = await adRepository.create(data);
+
+        // data.thumbnail = thumbnail;
+        // data.gallery = gallery;
+
+        const ad: Ad = {...data};
+
+        const gallery: Image[] = [];
+
+        req.files['gallery'].forEach(function (image) {
+            const img: Image = new Image();
+            img.url = `${__dirname}/uploads/` + image.filename;
+            connection.manager.save(img);
+            gallery.push(img);
+        });
+
+        const thumbnail: Image = new Image();
+        thumbnail.url = `${__dirname}/uploads/` + req.files['thumbnail'][0].filename;
+        await connection.manager.save(thumbnail);
+
+        ad.gallery = gallery;
+        ad.thumbnail = thumbnail;
+
         await adRepository.save(ad);
+
         return res.status(201).send("Data Saved");
     });
 
