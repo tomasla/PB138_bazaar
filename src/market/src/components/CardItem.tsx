@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -10,20 +10,25 @@ import { Grid } from "@material-ui/core";
 import "./../styles/CardItem.scss";
 
 interface IProps {
+  id: number
   name: string;
   description: string;
   price: number;
-  img: string;
 }
 
-export const CardItem: FunctionComponent<IProps> = ({
-  name,
-  description,
-  price,
-  img,
+export const CardItem: FunctionComponent<IProps> = ({id,name, description, price
 }) => {
 
+  const [thumbnailUrl, setThumbnailUrl] = useState(" ");
 
+  useEffect(() => {
+    getThumbnail();
+  }, []);
+
+  const getThumbnail = async () => {
+    const image = await fetch(`http://localhost:3000/ad/thumbnail/${id}`);
+    setThumbnailUrl(image.url);
+  }
 
   return (
     <Card className="card">
@@ -32,7 +37,7 @@ export const CardItem: FunctionComponent<IProps> = ({
           component="img"
           alt="product picture"
           height="250"
-          image={img}
+          image={thumbnailUrl}
           title={name}
         />
         <CardContent>

@@ -6,6 +6,8 @@ services:
             - db
         build: ./src/market-api
         image: market-api:latest
+        volumes:
+            - ./src/uploads:/usr/src/app/build/uploads
         ports:
             - 3000:3000
         restart: always

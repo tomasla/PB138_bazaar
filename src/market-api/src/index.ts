@@ -139,6 +139,7 @@ createConnection().then(async connection => {
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
             .leftJoinAndSelect("ad.thumbnail", "thumbnail")
+            .leftJoinAndSelect("ad.gallery", "gallery")
             .getMany();
         res.status(200).json(allAds);
     });
@@ -148,6 +149,7 @@ createConnection().then(async connection => {
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
             .leftJoinAndSelect("ad.thumbnail", "thumbnail")
+            .leftJoinAndSelect("ad.gallery", "gallery")
             .getOne();
         res.status(200).json(allAds);
     });
@@ -157,7 +159,11 @@ createConnection().then(async connection => {
      * parametrom je id inzeratu
      */
     app.get('/ad/thumbnail/:id', async function (req: Request, res: Response) {
-        const ad = await adRepository.findOne(req.params.id, {relations: ["thumbnail"]});
+        const ad = await adRepository
+            .createQueryBuilder("ad")
+            .leftJoinAndSelect("ad.thumbnail", "thumbnail")
+            .where("ad.id = :id", {id: req.params.id})
+            .getOne()
         res.status(200).sendFile(ad.thumbnail.url);
     });
 
@@ -166,7 +172,11 @@ createConnection().then(async connection => {
      * parametrom je id inzeratu
      */
     app.get('/ad/gallery/:id', async function (req: Request, res: Response) {
-        const ad = await adRepository.findOne(req.params.id, {relations: ["gallery"]});
+        const ad = await adRepository
+            .createQueryBuilder("ad")
+            .leftJoinAndSelect("ad.gallery", "gallery")
+            .where("ad.id = :id", {id: req.params.id})
+            .getOne()
         res.status(200).json(ad.gallery);
     });
 
