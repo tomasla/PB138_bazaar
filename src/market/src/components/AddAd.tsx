@@ -98,17 +98,15 @@ export class AddAd extends Component<IAddAdProps, IAddAdState> {
                     <TextField id="standard-basic" type="file" label="Gallery" inputProps={{multiple: true}}
                                onChange={this.galleryInputHandler}/>
                     <TextField id="standard-basic" name="priceInput" label="Price"
-                               value={this.state.priceInput}/>
-                </FormControl>
-                <FormControl>
+                               value={this.state.priceInput} onChange={this.inputValueChanged}/>
                     <TextField id="standard-basic" name="contactNameInput" label="Name"
-                               value={this.state.contactNameInput}/>
+                               value={this.state.contactNameInput} onChange={this.inputValueChanged}/>
                     <TextField id="standard-basic" name="surnameInput" label="Surname"
-                               value={this.state.surnameInput}/>
+                               value={this.state.surnameInput} onChange={this.inputValueChanged}/>
                     <TextField id="standard-basic" name="emailInput" label="Email"
-                               value={this.state.emailInput}/>
+                               value={this.state.emailInput} onChange={this.inputValueChanged}/>
                     <TextField id="standard-basic" name="phoneInput" label="Phone num."
-                               value={this.state.phoneInput}/>
+                               value={this.state.phoneInput} onChange={this.inputValueChanged}/>
                 </FormControl>
                 <Button variant="contained" type="submit" color="primary">
                     Add
