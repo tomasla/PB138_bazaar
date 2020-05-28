@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { Grid, Input } from "@material-ui/core";
 import { CardItem } from "./CardItem";
 import axios from "axios";
@@ -53,7 +53,7 @@ export const CardView: FunctionComponent = (): any | null => {
         phone: "938472837",
       },
     });
-    getAds();
+    await getAds();
   };
 
   //not working yet

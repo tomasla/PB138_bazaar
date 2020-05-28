@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -12,31 +12,7 @@ import { Link } from "react-router-dom";
 import { Contact } from "../../../market-api/src/entity/Contact";
 
 interface IProps {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  date: Date;
-  img: string;
-  contact: Contact
-}
 
-
-/*
-function handleCardActionClick(){
-  
-}
-*/
-
-export const CardItem: FunctionComponent<IProps> = ({
-  id,
-  name,
-  description,
-  price,
-  date,
-  img,
-  contact
-}) => {
   return (
     <Card className="card">
       <CardActionArea /*onClick={handleCardActionClick}*/>
@@ -44,7 +20,7 @@ export const CardItem: FunctionComponent<IProps> = ({
           component="img"
           alt="product picture"
           height="250"
-          image={img}
+          image={thumbnailUrl}
           title={name}
         />
         <CardContent>
