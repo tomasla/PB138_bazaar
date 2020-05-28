@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import {Grid} from "@material-ui/core";
 import "./../styles/CardItem.scss";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {Contact} from "../../../market-api/src/entity/Contact";
 
 interface IProps {
@@ -17,9 +17,9 @@ interface IProps {
     description: string;
     price: number;
     date: Date;
-    img: string;
     contact: Contact
 }
+
 
 export const CardItem: FunctionComponent<IProps> = ({
     id,
@@ -27,10 +27,10 @@ export const CardItem: FunctionComponent<IProps> = ({
   description,
   price,
   date,
-  img,
   contact
 }) => {
     const [thumbnailUrl, setThumbnailUrl] = useState(" ");
+    const [redirect, setRedirect] = useState(false);
 
     useEffect(() => {
         getThumbnail();
@@ -41,9 +41,34 @@ export const CardItem: FunctionComponent<IProps> = ({
         setThumbnailUrl(image.url);
     }
 
+    const handleCardActionClick = () => {
+        setRedirect(true);
+    }
+
+    
+    if (redirect){
+        const url = {
+            pathname: `/${id}`, state: {
+                name: name,
+                description: description,
+                price: price,
+                date: date,
+                contact_name: contact.name,
+                contact_surname: contact.surname,
+                contact_email: contact.email,
+                contact_phone: contact.phone,
+                contact_city: contact.city
+            }
+        }
+        return (
+            <div>
+                <Redirect to={url} />
+            </div>
+        );
+    }
     return (
         <Card className="card">
-            <CardActionArea /*onClick={handleCardActionClick}*/>
+            <CardActionArea onClick={handleCardActionClick}>
                 <CardMedia
                     component="img"
                     alt="product picture"
@@ -54,21 +79,6 @@ export const CardItem: FunctionComponent<IProps> = ({
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
                         {name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        <Link to={{
-                            pathname: `/${id}`, state: {
-                                name: name,
-                                description: description,
-                                price: price,
-                                date: date,
-                                contact_name: contact.name,
-                                contact_surname: contact.surname,
-                                contact_email: contact.email,
-                                contact_phone: contact.phone,
-                                contact_city: contact.city
-                            }
-                        }}>Info</Link>
                     </Typography>
                 </CardContent>
             </CardActionArea>
