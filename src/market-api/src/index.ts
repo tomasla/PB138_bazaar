@@ -21,15 +21,15 @@ createConnection().then(async connection => {
         console.log("There are no ads in the database.");
         console.log("Adding new ads to the database...")
 
-        /*
+        
         const cont1 = new Contact();
         cont1.email = "milan@buygo.cz";
         cont1.name = "Milan";
         cont1.phone = "872639402";
         cont1.surname = "Slovak";
+        cont1.city = "Brno";
 
         await connection.manager.save(cont1);
-
 
 
         const ad1 = new Ad();
@@ -37,15 +37,10 @@ createConnection().then(async connection => {
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
         ad1.category = "Computers";
-        ad1.thumbnail = thumb;
         ad1.price = 20000;
-        ad1.date = new Date(Date.now());
+        ad1.date = new Date();
 
-
-
-
-
-
+        /*
         console.log('adding images')
 
         let i = 2;
@@ -56,7 +51,7 @@ createConnection().then(async connection => {
             image.ad = ad1;
             await connection.manager.save(image);
             i++;
-        }
+        }*/
         
         ad1.contact = cont1;
 
@@ -67,6 +62,7 @@ createConnection().then(async connection => {
         cont2.name = "Jana";
         cont2.phone = "782615374";
         cont2.surname = "Boháčová";
+        cont2.city = "Bratislava";
 
         await connection.manager.save(cont2);
 
@@ -75,9 +71,8 @@ createConnection().then(async connection => {
         ad2.name = "VW Passat";
         ad2.description = "150k km, r. v. 2009";
         ad2.category = "Cars";
-        ad2.thumbnail = thumb;
         ad2.price = 90000;
-        ad2.date = new Date(Date.now());
+        ad2.date = new Date();
         ad2.contact = cont2;
 
         await connection.manager.save(ad2);
@@ -87,6 +82,7 @@ createConnection().then(async connection => {
         cont3.name = "dana";
         cont3.phone = "545454456";
         cont3.surname = "Vindová";
+        cont3.city = "Praha";
 
         await connection.manager.save(cont3);
 
@@ -95,15 +91,13 @@ createConnection().then(async connection => {
         ad3.name = "Xiaomi";
         ad3.description = "good used phone - working 100%";
         ad3.category = "phones";
-        ad3.thumbnail = thumb;
         ad3.price = 25;
-        ad3.date = new Date(Date.now());
+        ad3.date = new Date();
         
         ad3.contact = cont3;
 
         await connection.manager.save(ad3);
-
-         */
+         
     }
 
     const app = express();

@@ -12,14 +12,14 @@ services:
             - 3000:3000
         restart: always
         
-    market:
-        depends_on:
-             - market-api
-        build: ./src/market
-        image: market:latest
-        ports:
-             - 80:80
-        restart: always
+    #market:
+    #    depends_on:
+    #         - market-api
+    #    build: ./src/market
+    #    image: market:latest
+    #    ports:
+    #         - 80:80
+    #    restart: always
 
     db:
         image: postgres:alpine

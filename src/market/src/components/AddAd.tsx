@@ -21,6 +21,7 @@ interface IAddAdState {
     contactNameInput: string;
     surnameInput: string;
     phoneInput: string;
+    cityInput: string;
 }
 
 @inject('adStore')
@@ -37,7 +38,8 @@ export class AddAd extends Component<IAddAdProps, IAddAdState> {
             contactNameInput: " ",
             emailInput: " ",
             surnameInput: " ",
-            phoneInput: " "
+            phoneInput: " ",
+            cityInput: " "
         }
     }
 
@@ -76,7 +78,8 @@ export class AddAd extends Component<IAddAdProps, IAddAdState> {
                 email: this.state.emailInput,
                 name: this.state.contactNameInput,
                 phone: this.state.phoneInput,
-                surname: this.state.surnameInput
+                surname: this.state.surnameInput,
+                city: this.state.cityInput
             }
         }
         this.props.adStore!.addAd(newAd, this.state.thumbnailInput!, this.state.galleryInput);
@@ -107,6 +110,8 @@ export class AddAd extends Component<IAddAdProps, IAddAdState> {
                                value={this.state.emailInput} onChange={this.inputValueChanged}/>
                     <TextField id="standard-basic" name="phoneInput" label="Phone num."
                                value={this.state.phoneInput} onChange={this.inputValueChanged}/>
+                    <TextField id="standard-basic" name="cityInput" label="City"
+                               value={this.state.cityInput} onChange={this.inputValueChanged}/>
                 </FormControl>
                 <Button variant="contained" type="submit" color="primary">
                     Add
