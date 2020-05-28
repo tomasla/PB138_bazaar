@@ -1,35 +1,46 @@
-import * as bodyParser from  "body-parser";
+import * as bodyParser from "body-parser";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {Ad} from "./entity/Ad";
 import {Contact} from "./entity/Contact";
-import express = require("express");
-import cors = require("cors");
+import * as express from "express";
 import {Request, Response} from "express";
+import cors = require("cors");
 import {Image} from "./entity/Image";
+import * as multer from "multer";
 
 createConnection().then(async connection => {
-    
+
     const adRepository = connection.getRepository(Ad);
-    const allAds = await adRepository.find();
-    if (allAds.length == 0){
+    const imageRepository = connection.getRepository(Image);
+
+    const ads = await adRepository.find();
+
+    if (ads.length == 0) {
+
+        console.log("There are no ads in the database.");
+        console.log("Adding new ads to the database...")
+
+        
         const cont1 = new Contact();
         cont1.email = "milan@buygo.cz";
         cont1.name = "Milan";
         cont1.phone = "872639402";
         cont1.surname = "Slovak";
+        cont1.city = "Brno";
 
         await connection.manager.save(cont1);
+
 
         const ad1 = new Ad();
         
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
         ad1.category = "Computers";
-        ad1.thumbnail = "../images/1.jpg";
         ad1.price = 20000;
-        ad1.date = new Date(Date.now());
+        ad1.date = new Date();
 
+        /*
         console.log('adding images')
 
         let i = 2;
@@ -40,7 +51,7 @@ createConnection().then(async connection => {
             image.ad = ad1;
             await connection.manager.save(image);
             i++;
-        }
+        }*/
         
         ad1.contact = cont1;
 
@@ -51,6 +62,7 @@ createConnection().then(async connection => {
         cont2.name = "Jana";
         cont2.phone = "782615374";
         cont2.surname = "Boháčová";
+        cont2.city = "Bratislava";
 
         await connection.manager.save(cont2);
 
@@ -59,9 +71,8 @@ createConnection().then(async connection => {
         ad2.name = "VW Passat";
         ad2.description = "150k km, r. v. 2009";
         ad2.category = "Cars";
-        ad2.thumbnail = "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
         ad2.price = 90000;
-        ad2.date = new Date(Date.now());
+        ad2.date = new Date();
         ad2.contact = cont2;
 
         await connection.manager.save(ad2);
@@ -71,6 +82,7 @@ createConnection().then(async connection => {
         cont3.name = "dana";
         cont3.phone = "545454456";
         cont3.surname = "Vindová";
+        cont3.city = "Praha";
 
         await connection.manager.save(cont3);
 
@@ -79,52 +91,141 @@ createConnection().then(async connection => {
         ad3.name = "Xiaomi";
         ad3.description = "good used phone - working 100%";
         ad3.category = "phones";
-        ad3.thumbnail = "https://images.pexels.com/photos/163143/sackcloth-sackcloth-textured-laptop-ipad-163143.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
         ad3.price = 25;
-        ad3.date = new Date(Date.now());
+        ad3.date = new Date();
         
         ad3.contact = cont3;
 
         await connection.manager.save(ad3);
+         
     }
-
 
     const app = express();
     app.use(bodyParser.json());
     app.use(cors());
     const port = process.env.PORT || 3000;
 
-    await app.get("/", function (req: Request, res: Response) {
-        res.send("Hello world!");
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, `${__dirname}/uploads`)
+        },
+        filename: function (req, file, cb) {
+            console.log(file.mimetype);
+            let extension = "";
+            if (file.mimetype == "image/jpeg") {
+                extension = ".jpg";
+            } else if (file.mimetype == "image/png") {
+                extension = ".png";
+            }
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + extension;
+            cb(null, file.fieldname + '-' + uniqueSuffix);
+        }
+    })
+
+    const upload = multer({storage: storage})
+
+    app.get("/", function (req: Request, res: Response) {
+        res.send(`Hello world! ${__dirname}`);
     });
 
     await app.get(`/ads`, async function (req: Request, res: Response) {
         const allAds = await adRepository
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
-            .leftJoinAndSelect("ad.images", "images")
+            .leftJoinAndSelect("ad.thumbnail", "thumbnail")
+            .leftJoinAndSelect("ad.gallery", "gallery")
             .getMany();
-        res.send(allAds, 200);
+        res.status(200).json(allAds);
     });
 
     await app.get(`/ads/:id`, async function (req: Request, res: Response) {
         const allAds = await adRepository
             .createQueryBuilder("ad")
             .leftJoinAndSelect("ad.contact", "contact")
+            .leftJoinAndSelect("ad.thumbnail", "thumbnail")
+            .leftJoinAndSelect("ad.gallery", "gallery")
             .getOne();
-        res.send(allAds, 200);
+        res.status(200).json(allAds);
     });
 
-    app.post('/ads', async function (req: Request, res: Response){
+    /**
+     * /ad/thumbnail/:id vracia thumbnail vo forme suboru (.jpg)
+     * parametrom je id inzeratu
+     */
+    app.get('/ad/thumbnail/:id', async function (req: Request, res: Response) {
+        const ad = await adRepository
+            .createQueryBuilder("ad")
+            .leftJoinAndSelect("ad.thumbnail", "thumbnail")
+            .where("ad.id = :id", {id: req.params.id})
+            .getOne()
+        res.status(200).sendFile(ad.thumbnail.url);
+    });
+
+    /**
+     * /ad/gallery/:id vracia galeriu inzeratu.
+     * parametrom je id inzeratu
+     */
+    app.get('/ad/gallery/:id', async function (req: Request, res: Response) {
+        const ad = await adRepository
+            .createQueryBuilder("ad")
+            .leftJoinAndSelect("ad.gallery", "gallery")
+            .where("ad.id = :id", {id: req.params.id})
+            .getOne()
+        res.status(200).json(ad.gallery);
+    });
+
+    /**
+     * /ad/gallery/image/:id vracia jeden obrazok vo forme suboru (.jpg)
+     * s id = :id
+     */
+    app.get('/ad/gallery/image/:id', async function (req: Request, res: Response) {
+        const image = await imageRepository.findOne(req.params.id);
+        res.status(200).sendFile(image.url);
+    });
+
+    app.post('/ads', upload.fields(
+        [{
+            name: 'thumbnail',
+            maxCount: 1
+        },
+            {
+                name: 'gallery',
+                maxCount: 10
+            }
+        ]), async function (req: Request, res: Response) {
+        const data = JSON.parse(req.body.body);
+
         await adRepository
             .createQueryBuilder()
             .insert()
             .into(Contact)
-            .values(req.body.contact)
+            .values(data.contact)
             .execute();
-        const ad = await adRepository.create(req.body);
-        const result = await adRepository.save(ad);
-        return res.send(result);
+
+        // data.thumbnail = thumbnail;
+        // data.gallery = gallery;
+
+        const ad: Ad = {...data};
+
+        const gallery: Image[] = [];
+
+        req.files['gallery'].forEach(function (image) {
+            const img: Image = new Image();
+            img.url = `${__dirname}/uploads/` + image.filename;
+            connection.manager.save(img);
+            gallery.push(img);
+        });
+
+        const thumbnail: Image = new Image();
+        thumbnail.url = `${__dirname}/uploads/` + req.files['thumbnail'][0].filename;
+        await connection.manager.save(thumbnail);
+
+        ad.gallery = gallery;
+        ad.thumbnail = thumbnail;
+
+        await adRepository.save(ad);
+
+        return res.status(201).send("Data Saved");
     });
 
     await app.delete('/ad/:id', async function (req: Request, res: Response) {

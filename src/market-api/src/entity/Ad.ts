@@ -5,7 +5,7 @@ import {Image} from "./Image";
 @Entity()
 export class Ad {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @Column()
     name: string;
@@ -16,11 +16,14 @@ export class Ad {
     @Column()
     category: string;
 
-    @Column()
-    thumbnail: string;
+    @OneToOne(type => Image)
+    @JoinColumn()
+    thumbnail?: Image;
 
-    @OneToMany(type => Image, image => image.ad)
-    images: Image[];
+    @OneToMany(type => Image, image => image.ad, {
+        cascade: true
+    })
+    gallery?: Image[];
 
     @Column()
     price: number;
