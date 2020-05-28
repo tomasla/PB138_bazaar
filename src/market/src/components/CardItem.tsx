@@ -12,14 +12,24 @@ import {Link} from "react-router-dom";
 import {Contact} from "../../../market-api/src/entity/Contact";
 
 interface IProps {
-    id: number
+    id: number;
     name: string;
     description: string;
     price: number;
+    date: Date;
+    img: string;
+    contact: Contact
 }
 
-export const CardItem: FunctionComponent<IProps> = ({id, name, description, price}) => {
-
+export const CardItem: FunctionComponent<IProps> = ({
+    id,
+  name,
+  description,
+  price,
+  date,
+  img,
+  contact
+}) => {
     const [thumbnailUrl, setThumbnailUrl] = useState(" ");
 
     useEffect(() => {
