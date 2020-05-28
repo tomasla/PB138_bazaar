@@ -3,6 +3,7 @@ import {Ad} from "../../../market-api/src/entity/Ad";
 
 
 export class AdStore {
+
     @observable
     ads: Array<Ad>;
 
@@ -37,4 +38,13 @@ export class AdStore {
         this.ads = await adsResponse.json();
         this.isLoading = false;
     }
+
+    @action
+    async loadAd(id:number) {
+        const adsResponse = await fetch(`http://localhost:3000/ads/${id}`);
+        this.ads = await adsResponse.json();
+        this.isLoading = false;
+    }
+
+    
 }
