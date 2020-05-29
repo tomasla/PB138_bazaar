@@ -31,7 +31,6 @@ createConnection().then(async connection => {
 
         await connection.manager.save(cont1);
 
-
         const ad1 = new Ad();
         
         ad1.name = "Macbook";
@@ -40,19 +39,27 @@ createConnection().then(async connection => {
         ad1.price = 20000;
         ad1.date = new Date();
 
-        /*
-        console.log('adding images')
+        const thumb1 = new Image();
+        thumb1.url = "https://www.alza.sk/macbook-pro-13-retina-sk-2019-s-touch-barom-vesmirne-sivy-d5639255.htm?o=2";
+        thumb1.id = 123;
+        thumb1.ad = ad1;
 
-        let i = 2;
+        await connection.manager.save(thumb1);
 
-        while (i < 5) {
-            const image = new Image()
-            image.url = `../images/${i}.jpg`;
-            image.ad = ad1;
-            await connection.manager.save(image);
-            i++;
-        }*/
-        
+        const gallery: Image[] = [];
+        for (let i = 0; i < 3; i++) {
+            const img: Image = new Image();
+            img.ad = ad1;
+            img.url = "https://www.alza.sk/macbook-pro-13-retina-sk-2019-s-touch-barom-vesmirne-sivy-d5639255.htm?o=2";
+            img.id = i + 300;
+            gallery.push(img);
+            await connection.manager.save(img);
+        }
+
+        ad1.gallery = gallery;
+
+
+        ad1.thumbnail = thumb1;
         ad1.contact = cont1;
 
         await connection.manager.save(ad1);
