@@ -22,35 +22,23 @@ function App() {
 
     return (
         <Provider {...stores}>
-            <ThemeProvider theme={theme}>
-                <Paper>
-                    <Grid container direction="column">
-                        <Grid item xs={12}>
-                            <BrowserRouter>
-                                <Header/>
-                                <Switch>
-                                    <Route path="/addoffer" component={AddAd}/>
-                                    <Route path="/categories" component={Categories}/>
-                                    <Route path="/:id" component={AdDetails}/>
-                                    <Route path="/" component={CardView}/>
-                                </Switch>
-                            </BrowserRouter>
-                        </Grid>
-                        <Grid container justify="space-around">
-                            {/*
-          <Grid item sm={2} xs={false}></Grid>
-          <Grid item xs={10} sm={8}>
-            <CardView />
-          </Grid>
-          <Grid item sm={2} xs={false}></Grid>*/}
-                        </Grid>
-                        <Grid>FOOTER</Grid>
-                    </Grid>
-                </Paper>
-
-            </ThemeProvider>
-        </Provider>
-    );
+          <ThemeProvider theme={theme}>
+            <Paper>
+    
+              <BrowserRouter>
+                <Header />
+                <Switch>
+                  <Route path="/addoffer" component={AddAd} />
+                  <Route path="/categories" component={Categories} />
+                  <Route path="/:id" component={AdDetails} />
+                  <Route path="/" component={CardView} />
+                </Switch>
+              </BrowserRouter>
+              <Grid>FOOTER</Grid>
+        </Paper>
+      </ThemeProvider>
+    </Provider>
+  );
 }
 
 export default App;
