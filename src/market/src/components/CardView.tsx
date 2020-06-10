@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect } from "react";
-import { Grid, Input, Container } from "@material-ui/core";
+import { Grid, Input, Container, Switch, Button } from "@material-ui/core";
 import { CardItem } from "./CardItem";
+import { Link } from "react-router-dom";
 
 export const CardView: FunctionComponent = (): any | null => {
   const [search, setSearch] = React.useState("");
@@ -25,7 +26,7 @@ export const CardView: FunctionComponent = (): any | null => {
     ) {
       return null;
     }
-    console.log(data);
+    // console.log(data);
 
     return (
       <Grid item xs={12} sm={4} key={dataObject.id}>
@@ -34,12 +35,15 @@ export const CardView: FunctionComponent = (): any | null => {
     );
   };
 
-  const clickHandlerSort = () => {
-    let tempData = data;
-    tempData.sort(function (a: any, b: any) {
+  const clickHandlerSortDesc = () => {
+    data.sort(function (a: any, b: any) {
       return a.price - b.price;
     });
-    // setData(tempData);
+  };
+  const clickHandlerSortAsc = () => {
+    data.sort(function (a: any, b: any) {
+      return b.price - a.price;
+    });
   };
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,19 +53,42 @@ export const CardView: FunctionComponent = (): any | null => {
 
   return (
     <Container maxWidth="md">
-      <Input
-        id="filled-basic"
-        type="text"
-        placeholder="search item here"
-        onChange={changeHandler}
-      />
-      <button type="button" onClick={clickHandlerSort}>
-        sort by price (descending)
-      </button>
-
-      <Grid item container>
-        {data.map((dataObject) => getItemCard(dataObject))}
+      <Grid container >
+        <Grid item xs={12} md={4}>
+          <Input
+            id="filled-basic"
+            type="text"
+            placeholder="search item here"
+            onChange={changeHandler}
+          />
+        </Grid>
+        <Grid item xs={6} md={4}>
+          <Link to={{ pathname: "/" }} style={{ textDecoration: "none" }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={clickHandlerSortDesc}
+            >
+              sort by price (descending)
+            </Button>
+          </Link>
+        </Grid>
+        <Grid item xs={6} md={4}>
+          <Link to={{ pathname: "/" }} style={{ textDecoration: "none" }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={clickHandlerSortAsc}
+            >
+              sort by price (ascending)
+            </Button>
+          </Link>
+        </Grid>
       </Grid>
+
+      <Grid container>{data.map((dataObject) => getItemCard(dataObject))}</Grid>
     </Container>
   );
 };
