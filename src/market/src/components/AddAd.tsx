@@ -63,7 +63,7 @@ export class AddAd extends Component<IAddAdProps, IAddAdState> {
         // @ts-ignore
         this.setState({
             ...this.state,
-            galleryInput: event.target.files!
+            galleryInput: event.target.files
         })
     };
 
