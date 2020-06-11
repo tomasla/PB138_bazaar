@@ -116,15 +116,25 @@ export class AddAd extends Component<IAddAdProps, IAddAdState> {
               margin="normal"
               variant="outlined"
             />
-            <TextField
-              id="standard-basic"
-              name="categoryInput"
-              label="Category"
-              value={this.state.categoryInput}
-              onChange={this.inputValueChanged}
-              margin="normal"
-              variant="outlined"
-            />
+            <select id="standard-basic">
+              <option value="cars" >Cars</option>
+              <option value="moto">Moto</option>
+              <option value="pc">PC, Laptops</option>
+              <option value="phones">Phones</option>
+              <option value="realits" >Realits</option>
+              <option value="sport">Sport</option>
+              <option value="animals">Animals</option>
+              <option value="clothes">Clothes</option>
+              <option value="music" >Music</option>
+              <option value="garden">House & Garden</option>
+              <option value="furniture">Furniture</option>
+              <option value="books">Books</option>
+              <option value="children" >Children</option>
+              <option value="photo">Photo</option>
+              <option value="electro">Electro</option>
+              <option value="job">Job offers</option>
+              <option value="any">Jiné</option>
+            </select>
             <TextField
               id="standard-basic"
               type="file"

@@ -8,11 +8,11 @@ export default function Footer() {
       <footer className="footer-bottom">
         <Grid container>
           <Grid item container xs={12} md={6} justify="center">
-            <Typography>&copy;Tomas Lakota, Marek Migas, Miliver</Typography>
+            <Typography>&copy;Tomas Lakota, Marek Migas, Milan Slovák</Typography>
           </Grid>
           <Grid item container xs={12} md={6} justify="center">
             <Typography>
-              Created as seminar project for class PB132
+              Created as seminar project for class PB138
             </Typography>
           </Grid>
         </Grid>
