@@ -4,14 +4,18 @@ import { CardItem } from "./CardItem";
 import { Link } from "react-router-dom";
 import "./../styles/App.scss";
 
+interface IProps {
+  categoryP: string;
+}
 
-
-export const CardView: FunctionComponent = (): any | null => {
+export const CardView: FunctionComponent<IProps> = ({categoryP}): any | null => {
   const [search, setSearch] = React.useState("");
   const [data, setData] = React.useState([]);
+  const [category, setCategory] = React.useState("");
 
   useEffect(() => {
     getAds();
+    setCategory(categoryP);
   }, []);
 
   const getAds = async () => {
@@ -23,12 +27,25 @@ export const CardView: FunctionComponent = (): any | null => {
   };
 
   const getItemCard = (dataObject: any) => {
-    if (
-      search !== "" &&
-      dataObject.name.toLowerCase().indexOf(search.toLowerCase()) === -1
-    ) {
-      return null;
+    if (category !== "") {
+      if (
+        (search !== "" &&
+          dataObject.name.toLowerCase().indexOf(search.toLowerCase()) === -1) ||
+        dataObject.category.toLowerCase() !== category
+      ) {
+        return null;
+      }
     }
+
+    if (category == "") {
+      if (
+        (search !== "" &&
+          dataObject.name.toLowerCase().indexOf(search.toLowerCase()) === -1) 
+      ) {
+        return null;
+      }
+    }
+
     // console.log(data);
 
     return (
@@ -56,7 +73,7 @@ export const CardView: FunctionComponent = (): any | null => {
 
   return (
     <Container maxWidth="md">
-      <Grid container  className="filter-optons">
+      <Grid container className="filter-optons">
         <Grid item xs={12} md={4}>
           <Input
             id="filled-basic"
