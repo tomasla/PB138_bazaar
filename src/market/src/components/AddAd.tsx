@@ -2,7 +2,7 @@ import React, {ChangeEvent, Component} from "react";
 import TextField from "@material-ui/core/TextField";
 import {inject, observer} from "mobx-react";
 import {AdStore} from "../stores/AdStore";
-import {Button} from "@material-ui/core";
+import {Button, Container} from "@material-ui/core";
 import {Ad} from "../../../market-api/src/entity/Ad";
 import FormControl from "@material-ui/core/FormControl";
 
@@ -88,35 +88,36 @@ export class AddAd extends Component<IAddAdProps, IAddAdState> {
 
     render() {
         return (
-            <form onSubmit={this.submitForm} noValidate autoComplete="off">
-                <FormControl>
-                    <TextField id="standard-basic" name="nameInput" label="Name" value={this.state.nameInput}
-                               onChange={this.inputValueChanged}/>
-                    <TextField id="standard-basic" name="descriptionInput" label="Description"
-                               value={this.state.descriptionInput} onChange={this.inputValueChanged}/>
-                    <TextField id="standard-basic" name="categoryInput" label="Category"
-                               value={this.state.categoryInput} onChange={this.inputValueChanged}/>
-                    <TextField id="standard-basic" type="file" label="Thumbnail"
-                               onChange={this.thumbnailInputHandler}/>
-                    <TextField id="standard-basic" type="file" label="Gallery" inputProps={{multiple: true}}
-                               onChange={this.galleryInputHandler}/>
-                    <TextField id="standard-basic" name="priceInput" label="Price"
-                               value={this.state.priceInput} onChange={this.inputValueChanged}/>
-                    <TextField id="standard-basic" name="contactNameInput" label="Name"
-                               value={this.state.contactNameInput} onChange={this.inputValueChanged}/>
-                    <TextField id="standard-basic" name="surnameInput" label="Surname"
-                               value={this.state.surnameInput} onChange={this.inputValueChanged}/>
-                    <TextField id="standard-basic" name="emailInput" label="Email"
-                               value={this.state.emailInput} onChange={this.inputValueChanged}/>
-                    <TextField id="standard-basic" name="phoneInput" label="Phone num."
-                               value={this.state.phoneInput} onChange={this.inputValueChanged}/>
-                    <TextField id="standard-basic" name="cityInput" label="City"
-                               value={this.state.cityInput} onChange={this.inputValueChanged}/>
-                </FormControl>
-                <Button variant="contained" type="submit" color="primary">
-                    Add
-                </Button>
-            </form>
+            <Container maxWidth="md">            <form onSubmit={this.submitForm} noValidate autoComplete="off">
+            <FormControl>
+                <TextField id="standard-basic" name="nameInput" label="Name" value={this.state.nameInput}
+                           onChange={this.inputValueChanged}/>
+                <TextField id="standard-basic" name="descriptionInput" label="Description"
+                           value={this.state.descriptionInput} onChange={this.inputValueChanged}/>
+                <TextField id="standard-basic" name="categoryInput" label="Category"
+                           value={this.state.categoryInput} onChange={this.inputValueChanged}/>
+                <TextField id="standard-basic" type="file" label="Thumbnail"
+                           onChange={this.thumbnailInputHandler}/>
+                <TextField id="standard-basic" type="file" label="Gallery" inputProps={{multiple: true}}
+                           onChange={this.galleryInputHandler}/>
+                <TextField id="standard-basic" name="priceInput" label="Price"
+                           value={this.state.priceInput} onChange={this.inputValueChanged}/>
+                <TextField id="standard-basic" name="contactNameInput" label="Name"
+                           value={this.state.contactNameInput} onChange={this.inputValueChanged}/>
+                <TextField id="standard-basic" name="surnameInput" label="Surname"
+                           value={this.state.surnameInput} onChange={this.inputValueChanged}/>
+                <TextField id="standard-basic" name="emailInput" label="Email"
+                           value={this.state.emailInput} onChange={this.inputValueChanged}/>
+                <TextField id="standard-basic" name="phoneInput" label="Phone num."
+                           value={this.state.phoneInput} onChange={this.inputValueChanged}/>
+                <TextField id="standard-basic" name="cityInput" label="City"
+                           value={this.state.cityInput} onChange={this.inputValueChanged}/>
+            </FormControl>
+            <Button variant="contained" type="submit" color="primary">
+                Add
+            </Button>
+        </form></Container>
+
         )
     }
 }
