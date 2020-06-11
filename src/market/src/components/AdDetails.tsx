@@ -33,7 +33,7 @@ export class AdDetails extends Component<RouteComponentProps<RouteParams>> {
       <Container maxWidth="md">
         <Paper elevation={3} className="add-detail">
           <div className="add-detail-wrapper">
-            <h1>{name}</h1>
+            <h1 className="add-detail--name">{name}</h1>
             <hr />
             <p>{description}</p>
             <h2>Price:</h2>
@@ -51,7 +51,7 @@ export class AdDetails extends Component<RouteComponentProps<RouteParams>> {
       
             {/* add picture sources */}
             <div className="gallery">
-              <img src="https://picsum.photos/id/1015/1000/600/" alt="bla"></img>
+              <img src={image} alt="bla"></img>
               <img src="https://i.picsum.photos/id/1018/1000/600.jpg" alt="bla"></img>
               <img src="https://i.picsum.photos/id/1018/1000/600.jpg" alt="bla"></img>
               <img src="https://i.picsum.photos/id/1018/1000/600.jpg" alt="bla"></img>

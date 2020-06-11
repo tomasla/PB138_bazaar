@@ -120,8 +120,9 @@ export const CardView: FunctionComponent<IProps> = ({categoryP, shouldRender}): 
   return (
     <Container maxWidth="md">
       <Grid container className="filter-optons">
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12}>
           <Input
+            fullWidth
             id="filled-basic"
             type="text"
             placeholder="search item here"

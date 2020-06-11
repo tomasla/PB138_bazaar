@@ -41,6 +41,7 @@ $dark-color: rgb(5, 14, 131);
 }
 
 /* Error message */
+
 .MuiAlert-message {
   white-space: pre-wrap;
 }
@@ -51,6 +52,8 @@ $dark-color: rgb(5, 14, 131);
   margin: 10px;
 }
 
+/* Add offer */
+
 .add-detail {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -59,6 +62,8 @@ $dark-color: rgb(5, 14, 131);
 .add-detail-wrapper {
   margin: 10px;
 }
+
+/* product details */
 
 .gallery {
   display: grid;
@@ -75,6 +80,9 @@ $dark-color: rgb(5, 14, 131);
   margin-bottom: 20px;
 }
 
+.add-detail--name {
+  font-size: 2rem;
+}
 
 /* Footer */
 
