@@ -1,5 +1,5 @@
 import React from "react";
-import {Grid, ThemeProvider, Paper, createMuiTheme} from "@material-ui/core";
+import {Grid, ThemeProvider, Paper, createMuiTheme, Switch as DarkSwitch} from "@material-ui/core";
 import Header from "./Header";
 import {CardView} from "./CardView";
 import {AddAd} from "./AddAd";
@@ -8,13 +8,18 @@ import {AdDetails} from "./AdDetails";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {Provider} from "mobx-react";
 import {createStores} from "../stores/CreateStores";
+import Footer from "./Footer";
+import "./../styles/App.scss";
+import { light } from "@material-ui/core/styles/createPalette";
 
 
-//optional dark mode = tbd = type: "dark"
+//darkmode - clashes with mobX provider
 function App() {
+    const [darkMode, setDarkMode] = React.useState(false);
+
     const theme = createMuiTheme({
         palette: {
-            type: "light"
+            type: darkMode ? "dark" : "light",
         }
     })
 
@@ -22,9 +27,13 @@ function App() {
 
     return (
         <Provider {...stores}>
+          {/* <DarkSwitch checked={darkMode} onChange={()=> setDarkMode(!darkMode)}></DarkSwitch> */}
           <ThemeProvider theme={theme}>
             <Paper>
-    
+            
+              <div className="page-container">
+              <div className="content-wrap">
+
               <BrowserRouter>
                 <Header />
                 <Switch>
@@ -34,7 +43,10 @@ function App() {
                   <Route path="/" component={CardView} />
                 </Switch>
               </BrowserRouter>
-              <Grid>FOOTER</Grid>
+              
+              </div>
+              <Footer />
+              </div>
         </Paper>
       </ThemeProvider>
     </Provider>

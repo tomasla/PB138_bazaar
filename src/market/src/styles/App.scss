@@ -1,0 +1,83 @@
+/* global */
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  // background-color: rgb(172, 170, 170);
+}
+
+.content-wrap {
+  flex: 1;
+}
+
+.filter-optons {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+/* colors */
+
+$base-color: rgb(63, 81, 181);
+$dark-color: rgb(5, 14, 131);
+
+/* Navigation bar */
+
+.navbar-item {
+  padding: 17px;
+  color: white;
+}
+
+.navbar-item:hover {
+  background-color: $dark-color;
+  border-radius: 5px;
+}
+
+/* Cards */
+
+.card {
+  margin: 10px;
+}
+
+.add-detail{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.add-detail-wrapper{
+    margin: 10px;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-gap: 20px;
+}
+
+.gallery img{
+    width: 100%;
+}
+
+.addAd-wrapper{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* Footer */
+
+.footer-bottom {
+  background-color: $base-color;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
