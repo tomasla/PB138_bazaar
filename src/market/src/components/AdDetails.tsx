@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "react-router";
 import { AdStore } from "../stores/AdStore";
+import "./../styles/App.scss";
+
 import {
   Container,
   Grid,
@@ -46,17 +48,14 @@ export class AdDetails extends Component<RouteComponentProps<RouteParams>> {
             <div>Tel: {contact_phone}</div>
             <div>City: {contact_city}</div>
           </div>
-
-   
-            <GridList cellHeight={500}>
-              
-                <GridListTile>
-                  <img src={image} alt="blabla" />
-                </GridListTile>
-             
-            </GridList>
       
-
+            {/* add picture sources */}
+            <div className="gallery">
+              <img src="https://picsum.photos/id/1015/1000/600/" alt="bla"></img>
+              <img src="https://i.picsum.photos/id/1018/1000/600.jpg" alt="bla"></img>
+              <img src="https://i.picsum.photos/id/1018/1000/600.jpg" alt="bla"></img>
+              <img src="https://i.picsum.photos/id/1018/1000/600.jpg" alt="bla"></img>
+            </div>
 
         </Paper>
       </Container>

@@ -48,11 +48,24 @@ $dark-color: rgb(5, 14, 131);
 
 .add-detail{
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .add-detail-wrapper{
     margin: 10px;
 }
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-gap: 20px;
+}
+
+.gallery img{
+    width: 100%;
+}
+
+
 
 /* Footer */
 
