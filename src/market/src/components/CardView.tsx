@@ -2,6 +2,9 @@ import React, { FunctionComponent, useEffect } from "react";
 import { Grid, Input, Container, Switch, Button } from "@material-ui/core";
 import { CardItem } from "./CardItem";
 import { Link } from "react-router-dom";
+import "./../styles/App.scss";
+
+
 
 export const CardView: FunctionComponent = (): any | null => {
   const [search, setSearch] = React.useState("");
@@ -53,7 +56,7 @@ export const CardView: FunctionComponent = (): any | null => {
 
   return (
     <Container maxWidth="md">
-      <Grid container >
+      <Grid container  className="filter-optons">
         <Grid item xs={12} md={4}>
           <Input
             id="filled-basic"
@@ -63,26 +66,26 @@ export const CardView: FunctionComponent = (): any | null => {
           />
         </Grid>
         <Grid item xs={6} md={4}>
-          <Link to={{ pathname: "/" }} style={{ textDecoration: "none" }}>
+          <Link to={{ pathname: "/" }}>
             <Button
               variant="outlined"
               color="primary"
               size="small"
               onClick={clickHandlerSortDesc}
             >
-              sort by price (descending)
+              sort by price (ascending)
             </Button>
           </Link>
         </Grid>
         <Grid item xs={6} md={4}>
-          <Link to={{ pathname: "/" }} style={{ textDecoration: "none" }}>
+          <Link to={{ pathname: "/" }}>
             <Button
               variant="outlined"
               color="primary"
               size="small"
               onClick={clickHandlerSortAsc}
             >
-              sort by price (ascending)
+              sort by price (descending)
             </Button>
           </Link>
         </Grid>
