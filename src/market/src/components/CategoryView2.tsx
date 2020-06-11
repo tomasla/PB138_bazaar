@@ -13,6 +13,7 @@ import { CardView } from "./CardView";
 
 interface IProps{
     category: string;
+    shouldRender: boolean;
 }
 
 export const CategoryView: FunctionComponent<IProps> = ({category}) => {
@@ -24,7 +25,7 @@ export const CategoryView: FunctionComponent<IProps> = ({category}) => {
 
     if (redirect){
         return (
-            <CardView categoryP = {category} />
+            <CardView categoryP = {category} shouldRender= {false} />
           );
     }
     return (

@@ -40,7 +40,7 @@ function App() {
                   <Route path="/addoffer" component={AddAd} />
                   <Route path="/categories" component={Categories} />
                   <Route path="/:id" component={AdDetails} />
-                  <Route path="/" component={() => <CardView categoryP= ""/>} />
+                  <Route path="/" component={() => <CardView categoryP= "" shouldRender= {true}/>} />
                 </Switch>
               </BrowserRouter>
               

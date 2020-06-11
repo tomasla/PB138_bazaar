@@ -3,12 +3,14 @@ import { Grid, Input, Container, Switch, Button } from "@material-ui/core";
 import { CardItem } from "./CardItem";
 import { Link } from "react-router-dom";
 import "./../styles/App.scss";
+import { shouldCompute } from "mobx/lib/internal";
 
 interface IProps {
   categoryP: string;
+  shouldRender: boolean;
 }
 
-export const CardView: FunctionComponent<IProps> = ({categoryP}): any | null => {
+export const CardView: FunctionComponent<IProps> = ({categoryP, shouldRender}): any | null => {
   const [search, setSearch] = React.useState("");
   const [data, setData] = React.useState([]);
   const [category, setCategory] = React.useState("");
@@ -71,6 +73,50 @@ export const CardView: FunctionComponent<IProps> = ({categoryP}): any | null => 
     setSearch(e.target.value);
   };
 
+  if (shouldRender) {
+    return (
+      <Container maxWidth="md">
+        <Grid container className="filter-optons">
+          <Grid item xs={12} md={4}>
+            <Input
+              id="filled-basic"
+              type="text"
+              placeholder="search item here"
+              onChange={changeHandler}
+            />
+          </Grid>
+  
+          <Grid item xs={6} md={4}>
+            <Link to={{ pathname: "/" }}>
+              <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                onClick={clickHandlerSortDesc}
+              >
+                sort by price (ascending)
+              </Button>
+            </Link>
+          </Grid>
+          <Grid item xs={6} md={4}>
+            <Link to={{ pathname: "/" }}>
+              <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                onClick={clickHandlerSortAsc}
+              >
+                sort by price (descending)
+              </Button>
+            </Link>
+          </Grid>
+        </Grid>
+  
+        <Grid container>{data.map((dataObject) => getItemCard(dataObject))}</Grid>
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="md">
       <Grid container className="filter-optons">
@@ -81,30 +127,6 @@ export const CardView: FunctionComponent<IProps> = ({categoryP}): any | null => 
             placeholder="search item here"
             onChange={changeHandler}
           />
-        </Grid>
-        <Grid item xs={6} md={4}>
-          <Link to={{ pathname: "/" }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="small"
-              onClick={clickHandlerSortDesc}
-            >
-              sort by price (ascending)
-            </Button>
-          </Link>
-        </Grid>
-        <Grid item xs={6} md={4}>
-          <Link to={{ pathname: "/" }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="small"
-              onClick={clickHandlerSortAsc}
-            >
-              sort by price (descending)
-            </Button>
-          </Link>
         </Grid>
       </Grid>
 

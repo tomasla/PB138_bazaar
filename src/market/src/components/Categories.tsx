@@ -38,7 +38,7 @@ export const Categories: FunctionComponent = () => {
     
     if (category != ""){
         return (
-            <CardView categoryP = {category} />
+            <CardView categoryP = {category} shouldRender= {false}/>
         );
     }
     return (
