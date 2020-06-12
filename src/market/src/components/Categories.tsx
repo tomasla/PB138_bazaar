@@ -16,7 +16,26 @@ export const Categories: FunctionComponent = () => {
     const [redirect, setRedirect] = useState(false);
     const [category, setCategory] = useState("");
 
-    const getItemCard = (myCategory: any) => {
+
+    let categoriesImg = new Map<string, string>();
+    categoriesImg.set("cars", "https://www.buygo.cz/kategorie/car.png");
+    categoriesImg.set("moto", "https://www.buygo.cz/kategorie/motor-sports.png");
+    categoriesImg.set("pc", "https://www.buygo.cz/kategorie/device-laptop-icon.png");
+    categoriesImg.set("phones", "https://www.buygo.cz/kategorie/phone-call.png");
+    categoriesImg.set("realits", "https://www.buygo.cz/kategorie/house.png");
+    categoriesImg.set("sport", "https://www.buygo.cz/kategorie/bicycle.png");
+    categoriesImg.set("animals", "https://www.buygo.cz/kategorie/dog.png");
+    categoriesImg.set("clothes", "https://www.buygo.cz/kategorie/dress-shirt.png");
+    categoriesImg.set("music", "https://www.buygo.cz/kategorie/music-player.png");
+    categoriesImg.set("garden", "https://www.buygo.cz/kategorie/tree.png");
+    categoriesImg.set("furniture", "https://www.buygo.cz/kategorie/dining-table.png");
+    categoriesImg.set("books", "https://www.buygo.cz/kategorie/books.png");
+    categoriesImg.set("photo", "https://www.buygo.cz/kategorie/photo-camera.png");
+    categoriesImg.set("electro", "https://www.buygo.cz/kategorie/washing-machine.png");
+    categoriesImg.set("children", "https://www.buygo.cz/kategorie/stroller.png");
+    categoriesImg.set("job", "https://www.buygo.cz/kategorie/curriculum.png");
+
+    const getItemCard = (myCategory: string) => {
         return (
             <Grid item xs={12} sm={4}>
               <CardActionArea onClick={() => setCategory(myCategory)}>
@@ -24,7 +43,11 @@ export const Categories: FunctionComponent = () => {
                 component="img"
                 alt="product picture"
                 height="250"
+<<<<<<< HEAD
                 image="../../category-img/"
+=======
+                image={categoriesImg.get(myCategory)}
+>>>>>>> upstream/master
                 />
                 <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">

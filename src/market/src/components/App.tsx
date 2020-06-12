@@ -1,6 +1,6 @@
 import React from "react";
 import {Grid, ThemeProvider, Paper, createMuiTheme, Switch as DarkSwitch} from "@material-ui/core";
-import Header from "./Header";
+import {Header} from "./Header";
 import {CardView} from "./CardView";
 import {AddAd} from "./AddAd";
 import {Categories} from "./Categories";
