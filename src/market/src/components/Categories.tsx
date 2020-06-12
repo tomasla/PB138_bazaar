@@ -9,7 +9,6 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { Grid } from "@material-ui/core";
-import { CategoryView } from "./CategoryView";
 import { CardView } from "./CardView";
 
 export const Categories: FunctionComponent = () => {
@@ -25,6 +24,7 @@ export const Categories: FunctionComponent = () => {
                 component="img"
                 alt="product picture"
                 height="250"
+                image="../../category-img/"
                 />
                 <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">

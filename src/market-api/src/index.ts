@@ -35,7 +35,7 @@ createConnection().then(async connection => {
         
         ad1.name = "Macbook";
         ad1.description = "Super cool mac";
-        ad1.category = "Computers";
+        ad1.category = "pc";
         ad1.price = 20000;
         ad1.date = new Date();
 
@@ -77,7 +77,7 @@ createConnection().then(async connection => {
         
         ad2.name = "VW Passat";
         ad2.description = "150k km, r. v. 2009";
-        ad2.category = "Cars";
+        ad2.category = "cars";
         ad2.price = 90000;
         ad2.date = new Date();
         ad2.contact = cont2;

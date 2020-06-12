@@ -6,6 +6,18 @@ import "./../styles/App.scss";
 import { Link } from "react-router-dom";
 
 export default class Header extends Component {
+  refreshPage = () => {
+    window.location.reload();
+  }
+
+  getPathName = () => {
+    return window.location.pathname;
+  }
+
+  checkPathName = () => {
+
+  }
+
   render() {
     return (
       <AppBar position="static">
@@ -22,9 +34,21 @@ export default class Header extends Component {
               </Link>
             </Grid>
             <Grid item container xs={12} sm={3} justify="center">
-              <Link className="navbar-item" to={{ pathname: "/categories" }}>
-                <Typography style={{ fontSize: '20px' }}>Categories</Typography>
-              </Link>
+              {() => {
+                if (window.location.pathname == "/categories"){
+                  return (
+                    <Link className="navbar-item" to={{ pathname: "/categories" }} onClick = {() => window.location.reload()}>
+                      <Typography style={{ fontSize: '20px' }}>Categories</Typography>
+                    </Link>
+                  );
+                } else {
+                  return (
+                    <Link className="navbar-item" to={{ pathname: "/categories" }}>
+                      <Typography style={{ fontSize: '20px' }}>Categories</Typography>
+                    </Link>
+                  );
+                }
+              }}
             </Grid>
           </Grid>
         </Toolbar>
